@@ -1,0 +1,39 @@
+#zoneDeJeux{
+    width: 80%;
+    height: 100%;
+    top: 0;
+    left: 20%;
+    background-image: url('img/zoneDeJeux2.jpg');
+    position: absolute;
+}
+#bordureG{
+    width: 20%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: url('img/zoneDeJeux.jpg');
+    position: absolute;
+}
+#bordureD{
+    width: 20%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background-image: url('img/zoneDeJeux.jpg');
+    position: absolute;
+}
+#alice{
+    width: 50px;
+    height: 90px;
+    top: 10px;
+    left: calc(50% - 25px);
+    background-image: url('img/zoneDeJeux3.jpg');
+    position: absolute;
+}
+#missile{
+    display: none;
+    width: 50px;
+    height: 50px;
+    /*background-image: url('img/missile.jpg');*/
+    position: absolute;
+}
