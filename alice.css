@@ -1,6 +1,6 @@
 #zoneDeJeux{
     width: 800px;
-    height: 100%;
+    height: 600px;
     top: 0;
     left: 100px;
     background-image: url('images/zoneDeJeux2.jpg');
@@ -8,7 +8,7 @@
 }
 #bordureG{
     width: 100px;
-    height: 100%;
+    height: 600px;
     top: 0;
     left: 0;
     background-image: url('images/zoneDeJeux.jpg');
@@ -16,13 +16,13 @@
 }
 #bordureD{
     width: 100px;
-    height: 100%;
+    height: 600px;
     top: 0;
     left : 900px;
     background-image: url('images/zoneDeJeux.jpg');
     position: absolute;
 }
-.jeuxALICE{width: 1000px; position: relative; height: 600px;}
+.jeuxALICE{width: 1000px; position: relative; height: 600px; overflow: hidden;}
 #alice{
     width: 80px;
     height: 80px;

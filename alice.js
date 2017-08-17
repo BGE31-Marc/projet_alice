@@ -8,19 +8,29 @@ var bordureD = document.querySelector('#bordureD');
 var alice = document.querySelector('#alice');
 var cible = document.querySelector('.jeuxALICE');
 var aliceRecupCSS = getComputedStyle(alice);
+var missile;
 //largeur de alice
 var aliceWidth = parseInt(aliceRecupCSS.width.replace("px", ""));
 //demi alice
 var demialiceWidth = aliceWidth/2;
 // ## taille de le zone de jeux
 var zoneDeJeuxRecupCSS = getComputedStyle(zoneDeJeux);
+var positionMini;
+var tailleZoneDeJeux;
+var positionMaxi;
 //## DEPLACEMENT DU DECORS##
 var bg_Y = 0;
 var bordure_Y = 0;
 //## DEPLACEMENT ALICE ##
 var pasAlice;
-let posAlice = aliceRecupCSS.left.replace("px", "");
+let posAlice = parseInt(aliceRecupCSS.left.replace("px", ""));
 let touche = [];
+
+let missilePresent = false;
+var positionMissile;
+var cibleMissile;
+var missileRecupCSS;
+var positionMissileY;
 
 
 
@@ -28,9 +38,9 @@ let touche = [];
 function loop(){
 
     //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE
-    var positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
-    var tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
-    var positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
+    positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
+    tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
+    positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
 
 
 deplacement_bg();
@@ -38,26 +48,46 @@ deplacement_bordure();
 //pascal detection touches-> attribution du pas
     // Gestion des touches du clavier
     if (touche[37]===true && posAlice > positionMini) {
-      posAlice-=5;
-      alice.style.left = posAlice + 'px';
+        // console.log(posAlice+' '+positionMini);
+        posAlice-=5;
+        alice.style.left = posAlice + 'px';
     }
     if (touche[39]===true && posAlice < positionMaxi) {
-      posAlice+=5;
-      alice.style.left = posAlice + 'px';
+        // console.log(posAlice+' '+positionMaxi);
+        posAlice+=5;
+        alice.style.left = posAlice + 'px';
     }
-    if (touche[32]===true) {
-      console.log('touche 32');
-      //## CREATION MISSILE
-      var positionMissile = posAlice + demialiceWidth;
-      var missile = document.createElement('div');
-      missile.setAttribute('class', 'missileTire');
-      missile.style.top = 100 + 'px';
-      missile.style.left = positionMissile + 'px';
-      cible.appendChild(missile);
+
+
+    if ((touche[32]===true) && (!missilePresent)) {
+        console.log('touche 32');
+        missilePresent = true;
+          //## CREATION MISSILE
+        positionMissile = posAlice + demialiceWidth -10;
+        missile = document.createElement('div');
+        missile.setAttribute('class', 'missileTire');
+        missile.style.top = 100 + 'px';
+        missile.style.left = positionMissile + 'px';
+        cible.appendChild(missile);
     }
+
+
+if(missilePresent){
+    cibleMissile = document.querySelector('.missileTire');
+    missileRecupCSS = getComputedStyle(cibleMissile);
+    positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
+    positionMissileY += 2;
+    missile.style.top = positionMissileY + 'px';
+
+    if(positionMissileY >= 600){
+        cible.removeChild(missile);
+        missilePresent = false;
+        // console.log("atteint 400 px");
+    }
+}
+
+
 gestionClavier();
-
-
 //# REFRESH
 requestAnimationFrame(loop);
 }
