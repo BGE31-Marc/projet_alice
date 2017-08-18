@@ -36,15 +36,61 @@ var missile;
 var positionMissileX;
 var positionMissileY;
 // ## GESTION D UN ENNEMI
-var ennemiVivant = false;
-var cibleEnnemi;
-var ennemiRecupCSS;
+// var cibleEnnemi;
+// var ennemiRecupCSS;
 var ennemi;
 var positionEnnemiX;
 var positionEnnemiY;
 var positionEnnemiAleaX;
 var ennemiWidth; // ennemi.style.width
 var ennemiHeight; // ennemi.style.height
+
+
+
+
+
+
+
+
+
+var tablMonstre = [];
+var nbreMonstre = 3;
+var enHaut;
+var agauche;
+var hauteur;
+var largeur;
+var vitesse;
+var vitesseAlea;
+
+
+
+for(var i=0; i<nbreMonstre; i++){
+    //on fabrique un ennemi, on defini ces proprietes
+    ennemi = document.createElement('div');
+    ennemi.setAttribute('class', 'ennemiFabrique');
+    ennemi.setAttribute('id', 'monstre'+i);
+    ennemi.style.top = 500 + 'px' ;
+    positionEnnemiAleaX = Math.floor(Math.random() * 600) + 100;
+    ennemi.style.left = positionEnnemiAleaX + 'px' ;
+    //on ajoute l'ennemi dans le DOM
+    cible.appendChild(ennemi);
+    //on recupere l'ennemi en question et ces proprietes CSS
+    var cibleEnnemi= document.querySelector('#monstre'+i);
+    var ennemiRecupCSS = getComputedStyle(cibleEnnemi);
+    //stock les donnees propres a chaque ennemi dans le tableau -> initialisation du tableau
+    var topEnnemi = parseInt(ennemiRecupCSS.top.replace("px", ""));
+    var leftEnnemi = parseInt(ennemiRecupCSS.left.replace("px", ""));
+    var hauteurEnnemi = parseInt(ennemiRecupCSS.height.replace("px", ""));
+    var largeurEnnemi = parseInt(ennemiRecupCSS.width.replace("px", ""));
+    //vitesseAlea =  Math.floor(Math.random() 1); // pas entre 1 et 2
+    tablMonstre[i]= {   'enHaut':topEnnemi,
+                        'agauche':leftEnnemi,
+                        'hauteur': hauteurEnnemi,
+                        'largeur':largeurEnnemi};
+    // console.log("ligne 64 | " + tablMonstre[i].vitesse);
+}
+
+
 //## GESTION DES COLLISIONS
 
 // ## FONCTION LOOP ################################################
@@ -61,6 +107,25 @@ function loop(){
     missile_F();
     ennemi_F();
     collision();
+    for(var j=0; j<tablMonstre.length; j++){
+        // topEnnemi = tablMonstre[j].enHaut;
+        // // console.log( i + " | 120 | " + topEnnemi);
+        // topEnnemi += -1 ;
+        // // console.log( i + " | 122 | " + topEnnemi);
+        // tablMonstre[j]= {'enHaut': topEnnemi};
+        // console.log( j + " | 124 | " + tablMonstre[j].enHaut);
+        cibleEnnemi= document.querySelector('#monstre'+j);
+        // console.log("ligne 179 | " + typeof{cibleEnnemi});
+        ennemiRecupCSS = getComputedStyle(cibleEnnemi);
+        topEnnemi = parseInt(ennemiRecupCSS.top.replace("px", ""));
+        topEnnemi += -1 ;
+        tablMonstre[j]= {'enHaut': topEnnemi};
+        cibleEnnemi.style.top = topEnnemi + 'px';
+        if(topEnnemi < 100){
+            cibleEnnemi.style.top = 400 + 'px';
+        }
+    }
+    // alert("l 127 ");
     //# REFRESH
     requestAnimationFrame(loop);
 }
@@ -132,34 +197,20 @@ function missile_F(){
 
 }
 function ennemi_F(){
-    //fabrication d'un ennemi
-    if(!ennemiVivant){
-        ennemiVivant = true;
-        ennemi = document.createElement('div');
-        ennemi.setAttribute('class', 'ennemiFabrique');
-        ennemi.style.top = 500 + 'px' ;
-        //la position en x aleatoire, 100 correspond a la largeur de la div
-        //plus tard, on affectera une var monstre1; var monstre2; chaque monstre aura une width definie
-        //en fnction du monstre genere, la largeur sera connue; propriete des monstres ->tab??
-        positionEnnemiAleaX = Math.floor(Math.random() * 600) + 100;
-        ennemi.style.left = positionEnnemiAleaX + 'px' ;
-        cible.appendChild(ennemi);
-        console.log("ligne 144");
-    }
     //deplacement
-    if(ennemiVivant){
-        cibleEnnemi= document.querySelector('.ennemiFabrique');
-        ennemiRecupCSS = getComputedStyle(cibleEnnemi);
-        positionEnnemiY = parseInt(ennemiRecupCSS.top.replace("px", ""));
-        positionEnnemiY -= 3;
-        ennemi.style.top = positionEnnemiY + 'px';
+        // cibleEnnemi= document.querySelector('#monstre'+i);
+        // console.log("ligne 179 | " + typeof{cibleEnnemi});
+        // ennemiRecupCSS = getComputedStyle(cibleEnnemi);
+        // positionEnnemiY = parseInt(ennemiRecupCSS.top.replace("px", ""));
+        // positionEnnemiY -= 3;
+        // ennemi.style.top = positionEnnemiY + 'px';
         //tue si ennemi arrive en haut
-        if(positionEnnemiY <= -100){
-            cible.removeChild(ennemi);
-            ennemiVivant = false;
-        }
-    }
-
+        // if(positionEnnemiY <= -100){
+        //     cible.removeChild(ennemi);
+        //     ennemiVivant = false;
+        //     nbreMonstre --;
+        // }
+    //}
 
 }
 function collision(){
@@ -169,7 +220,6 @@ function collision(){
         //entre bas alice et haut ennemi
     //collision entre bas missile et haut ennemi
 }
-
 
 loop();
 // ### FIN DU DOMContentLoaded ############################
