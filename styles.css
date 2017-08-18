@@ -1,0 +1,33 @@
+/*
+div {
+	text-align:center;
+	}
+div#bandeau_de_login {
+	width:100%;
+	height:50px;
+	background-color:#00CCFF;
+	}
+*/
+#encart {
+  background-color: cyan;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  font-family : Arial;
+  font-style : italic;
+  font-size : 25px;
+  font-weight : bold;
+  line-height: -18px;
+}
+
+#non_inscrit{
+width: 50%;
+float: left;
+}
+#jouerdesuite{
+width: 50%;
+float: left;
+}
+#grand_cadre{
+overflow: hidden;
+}

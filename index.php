@@ -1,0 +1,8 @@
+<?php
+// Vérification d'authentification
+
+
+
+
+
+ ?>
