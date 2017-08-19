@@ -231,6 +231,16 @@ function collision(){
             if((topEnnemi < bottomMissile) && (topEnnemi > topMissile)){
                 if((gaucheMissile > leftEnnemi) && (gaucheMissile < droitEnnemi)){
                     console.log("collision");
+                    //replacement ennemi
+                    cibleEnnemi= document.querySelector('#monstre'+k);
+                    ennemiRecupCSS = getComputedStyle(cibleEnnemi);
+                    nouvellePositionEnnemi = Math.floor(Math.random()*700)+100;
+                    cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
+                    nouvellePositionEnnemiTop = Math.floor(Math.random()*800)+600;
+                    cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
+                    //effacement missile
+                    cible.removeChild(missile);
+                    missilePresent = false;
                 }
             }
         //fin test existance missile
