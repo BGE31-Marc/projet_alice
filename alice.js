@@ -79,17 +79,26 @@ for(var i=0; i<nbreMonstre; i++){
 //## GESTION DU TEMPS
 var tempsDebutJeux;
 var tempsFinJeux;
+//## LANCEMENT ET ARRET DU JEU
+var partieEnCours = true;
+// var demarrer = document.querySelector('input[type=button]');
+// demarrer.addEventListener('click', function(){
+//     loop();
+    // ## TIMESTAMP ####################################
+    //tempsDebutJeux = Date.now();
+// });
+//## COMPTEUR DE POINTS
+var compteurScore = 0;
+var pointMonstre = 10;
+var dureeJeux;
 // ## FONCTION LOOP ################################################
 function loop(){
-    // ## TIMESTAMP ####################################
-    tempsDebutJeux = Date.now();
-    // alert(tempsDebut);
+
 
     //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE
     positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
     tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
     positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
-
     deplacement_bg();
     deplacement_bordure();
     gestion_Clavier();
@@ -98,7 +107,10 @@ function loop(){
     ennemi_F();
     collision();
     //# REFRESH
-    requestAnimationFrame(loop);
+    // if(partieEnCours){
+        requestAnimationFrame(loop);
+    // }
+
 }
 //## FONCTIONS JEUX ################################################
 function deplacement_bg(){
@@ -230,7 +242,6 @@ function collision(){
             //collision
             if((topEnnemi < bottomMissile) && (topEnnemi > topMissile)){
                 if((gaucheMissile > leftEnnemi) && (gaucheMissile < droitEnnemi)){
-                    console.log("collision");
                     //replacement ennemi
                     cibleEnnemi= document.querySelector('#monstre'+k);
                     ennemiRecupCSS = getComputedStyle(cibleEnnemi);
@@ -241,6 +252,14 @@ function collision(){
                     //effacement missile
                     cible.removeChild(missile);
                     missilePresent = false;
+                    compteurScore += pointMonstre;
+                    //augmentation du nbre de monstre en fct du score
+                    //faire un modulo par 100, reste =0
+                    if(compteurScore === 50 || compteurScore === 70 || compteurScore || 100){
+                        //nbreMonstre
+                        //console.log(nbreMonstre);
+                    }
+
                 }
             }
         //fin test existance missile
@@ -249,9 +268,14 @@ function collision(){
 }
 function youLoose(){
     console.log("you loooose");
-    tempsFinJeux = Date.now();
-    //alert(tempsFinJeux);
+    //tempsFinJeux = Date.now();
+    partieEnCours = false;
+    //console.log(dureeJeux);
+    //console.log(compteurScore);
+    //dureeJeux = tempsFinJeux - tempsDebutJeux;
+    //console.log(dureeJeux);
 }
+
 loop();
 // ### FIN DU DOMContentLoaded ############################
 });
