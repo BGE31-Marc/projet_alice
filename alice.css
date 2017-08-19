@@ -15,19 +15,20 @@
     position: absolute;
 }
 #bordureD{
-    width: 100px;
-    height: 600px;
+    width: 100%;
+    height: 600px;;
     top: 0;
     left : 900px;
     background-image: url('images/zoneDeJeux.jpg');
     position: absolute;
 }
-.jeuxALICE{width: 1000px; position: relative; height: 600px; overflow: hidden;}
+.jeuxALICE{width: 100%; position: relative; height: 600px; overflow: hidden;}
 #alice{
-    width: 80px;
+    width: 100px;
     height: 80px;
     top: 10px;
-    left: calc(50% - 25px);
+    /*left: calc(50% - 25px);*/
+    left: calc(500px - 25px);
     background-image: url('images/zoneDeJeux3.jpg');
     position: absolute;
 }
