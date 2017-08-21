@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,14 +10,17 @@
 
 
         <script type="text/javascript" src="alice.js"></script>
-        <script type="text/javascript" src="test.js"></script>
-
+        <script type="text/javascript" src="traitement.js"></script>
     </head>
     <body>
         <div class="jeuxALICE">
             <div id="zoneDeJeux"></div>
             <div id="bordureG"></div>
             <div id="bordureD">
+                <?php //if(isset($message)){
+                    ?>
+                    <div class="message"><?php //echo $message; ?></div>
+                <?php// } ?>
                 <input type="button" name="" value="start">
             </div>
             <div id="alice"></div>

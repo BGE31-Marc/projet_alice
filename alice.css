@@ -29,37 +29,48 @@
 input[value='start']{width: 100px; height: 100px; margin-left: 100px;margin-top: 100px;background-image: url('images/zoneDeJeux2.jpg');font-size: 35px;border-radius: 50%;}
 .jeuxALICE{width: 100%; position: relative; height: 600px; overflow: hidden;}
 #alice{
-    width: 60px;
-    height: 100px;
+    width: 80px;
+    height: 120px;
     top: 10px;
     /*left: calc(50% - 25px);*/
     left: calc(500px - 25px);
     background-image: url('images/alice3.png');
     /*background-size: cover;*/
     position: absolute;
+    /*background: url("images/sprite_ken.png");
+	animation: spriteanimation 0.5s steps(10) infinite;
+	transform:scaleX(-1);*/
 }
+/*@keyframes spriteanimation {
+   from { background-position-x: 0; }
+   to { background-position-x: 1000px; }
+}*/
 .missileTire{
     width: 40px;
-    height: 40px;
+    height: 60px;
     background-image: url('images/missile.png');
     background-size: cover;
     position: absolute;
+    /*background-color: pink;*/
 }
 .ennemiFabrique{
     width: 100px;
     height: 100px;
-    background-image: url('images/ennemi4.png');
+    background-image: url('images/ennemi1.png');
     background-size: cover;
     position: absolute;
+    /*background-color: purple;*/
 }
 
+.message{width: 200px; height: 40px; background-color: inherit; color: white;text-align: center;margin: auto;}
 
-
-
+/**/
 /*## PAGE ACCUEIL##################################################################*/
+body{ font-family:'AliciaWonderland', arial;text-shadow: 5px 5px 100px rgba(255,255,255,1);}
 .accueil{background-image: url('images/accueil_alice3.jpg'); background-size: cover;}
-h1{color: white; font-size: 50px;margin-bottom: 29%; text-align: center; letter-spacing: 0.5rem; line-height: 50px;}
+h1{font-family:'AliciaWonderland', arial;color: white; font-size: 80px;margin-bottom: 21%; text-align: center; letter-spacing: 0.5rem; line-height: 50px; box-shadow: 30px 30px -10px 50px rgba(255,255,255,0.3);}
 .zone_formulaire{width: 100%; height: 100%;  display: flex;flex-direction: row; justify-content: space-between; color: white;}
 fieldset{border:none; display: flex; flex-direction: column;}
-fieldset input{margin: 20px;}
-fieldset button{width: 100px; height: auto;margin: auto; background-color: inherit;color: white; border: none; cursor: pointer; font-size: 25px;}
+fieldset input{margin: 20px; box-shadow: 4px 4px 150px 10px rgba(255,255,255,0.3);}
+fieldset input[type='submit']{margin-top: 20px;width: 200px; height: auto; background-color: inherit; color: white; border: none; cursor: pointer; font-size: 30px; text-shadow: 2px 1px 5px white;font-family:'AliciaWonderland', arial;letter-spacing: 0.5rem;
+ box-shadow: -1px 4px 210px 70px rgba(255,255,255,0) inset;}

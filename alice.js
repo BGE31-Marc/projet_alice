@@ -38,7 +38,7 @@ var droitMissile;
 var gaucheMissile;
 // ## GESTION D UN ENNEMI
 var tablMonstre = [];
-var nbreMonstre = 2;
+var nbreMonstre = 5;
 var enHaut;
 var agauche;
 var hauteur;
@@ -49,15 +49,18 @@ var nouvellePositionEnnemi;
 var cibleEnnemi;var ennemiRecupCSS;
 var topEnnemi;var leftEnnemi;var hauteurEnnemi;var largeurEnnemi;
 var droitEnnemi; var bottomEnnemi;
+var numEnnemi;
 // ## GENERATION DES MONSTRES ######################################
 for(var i=0; i<nbreMonstre; i++){
     //on fabrique un ennemi, on defini ces proprietes
     ennemi = document.createElement('div');
     ennemi.setAttribute('class', 'ennemiFabrique');
     ennemi.setAttribute('id', 'monstre'+i);
-    ennemi.style.top = -95 + 'px' ;
+    ennemi.style.top = -90 + 'px' ;
     positionEnnemiAleaX = Math.floor(Math.random() * 600) + 100;
     ennemi.style.left = positionEnnemiAleaX + 'px' ;
+    // numEnnemi = Math.floor(Math.random() * 3) + 1;
+    // ennemi.style.backgroundImage="url('images/ennemi1.png')";
     //on ajoute l'ennemi dans le DOM
     cible.appendChild(ennemi);
     //on recupere l'ennemi en question et ces proprietes CSS
@@ -79,7 +82,7 @@ for(var i=0; i<nbreMonstre; i++){
 //## GESTION DU TEMPS
 var tempsDebutJeux;
 var tempsFinJeux;
-//## LANCEMENT ET ARRET DU JEU
+//## LANCEMENT DU JEU
 var partieEnCours = true;
 // var demarrer = document.querySelector('input[type=button]');
 // demarrer.addEventListener('click', function(){
@@ -91,53 +94,91 @@ var partieEnCours = true;
 var compteurScore = 0;
 var pointMonstre = 10;
 var dureeJeux;
+
+
+
+gestion_Clavier();
 // ## FONCTION LOOP ################################################
 function loop(){
-
 
     //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE
     positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
     tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
     positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
-    deplacement_bg();
-    deplacement_bordure();
-    gestion_Clavier();
+    // deplacement_bg();
+        //defini le pas de defilement
+        bg_Y -= 1;
+        //on replace le bg
+        if(bg_Y >= 600) {bg_Y = 0;}
+        //on redessinne
+        zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
+    // deplacement_bordure();
+            //on definie le pas
+            bordure_Y -= 2;
+            //on replace l'image
+            if(bordure_Y >= 600) {bordure_Y = 0;}
+            //on redessinne les 2 bordures
+            bordureG.style.backgroundPositionY = bordure_Y + 'px';
+            bordureD.style.backgroundPositionY = bordure_Y + 'px';
+
+
+
+
     deplacement_Alice();
-    missile_F();
+    // missile_F();
+
+    if(missilePresent){
+        //deplacement
+        cibleMissile = document.querySelector('.missileTire');
+        missileRecupCSS = getComputedStyle(cibleMissile);
+        positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
+        positionMissileY += 2;
+        missile.style.top = positionMissileY + 'px';
+        //destruction mmissile en bas
+        if(positionMissileY >= 600){
+            cible.removeChild(missile);
+            missilePresent = false;
+        }
+    }
+
     ennemi_F();
     collision();
+    // console.log(partieEnCours);
     //# REFRESH
-    // if(partieEnCours){
+    if(partieEnCours){
         requestAnimationFrame(loop);
-    // }
+    }
 
 }
 //## FONCTIONS JEUX ################################################
 function deplacement_bg(){
-    //defini le pas de defilement
-    bg_Y -= 1;
-    //on replace le bg
-    if(bg_Y >= 600) {bg_Y = 0;}
-    //on redessinne
-    zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
+    // //defini le pas de defilement
+    // bg_Y -= 1;
+    // //on replace le bg
+    // if(bg_Y >= 600) {bg_Y = 0;}
+    // //on redessinne
+    // zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
 }
 function deplacement_bordure(){
     //on definie le pas
-    bordure_Y -= 2;
-    //on replace l'image
-    if(bordure_Y >= 600) {bordure_Y = 0;}
-    //on redessinne les 2 bordures
-    bordureG.style.backgroundPositionY = bordure_Y + 'px';
-    bordureD.style.backgroundPositionY = bordure_Y + 'px';
+    // bordure_Y -= 2;
+    // //on replace l'image
+    // if(bordure_Y >= 600) {bordure_Y = 0;}
+    // //on redessinne les 2 bordures
+    // bordureG.style.backgroundPositionY = bordure_Y + 'px';
+    // bordureD.style.backgroundPositionY = bordure_Y + 'px';
 }
 function gestion_Clavier() {
   // Détection de touche enfoncée
   document.addEventListener('keydown', function(event) {
         touche[event.which] = true;
+        //  ken.style.transform = "scaleX(1)";
+        if ((touche[32]===true) && (!missilePresent)) {missile_F();}
   });
   // détection de touche non enfoncée
   document.addEventListener('keyup', function(event) {
     touche[event.which] = false;
+    //  ken.style.transform = "scaleX(-1)";
   });
 }
 function deplacement_Alice(){
@@ -153,7 +194,7 @@ function deplacement_Alice(){
 }
 function missile_F(){
     //detection de la touche espace et creation d'un missile
-    if ((touche[32]===true) && (!missilePresent)) {
+
         missilePresent = true;
         positionMissileX = posAlice + demialiceWidth -10;
         missile = document.createElement('div');
@@ -161,30 +202,32 @@ function missile_F(){
         missile.style.top = 100 + 'px';
         missile.style.left = positionMissileX + 'px';
         cible.appendChild(missile);
-    }
+    // }
     //deplacement du missile et destruction
-    if(missilePresent){
-        //deplacement
-        cibleMissile = document.querySelector('.missileTire');
-        missileRecupCSS = getComputedStyle(cibleMissile);
-        positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
-        positionMissileY += 2;
-        missile.style.top = positionMissileY + 'px';
-        //destruction mmissile en bas
-        if(positionMissileY >= 600){
-            cible.removeChild(missile);
-            missilePresent = false;
-        }
-    }
+    // if(missilePresent){
+    //     //deplacement
+    //     cibleMissile = document.querySelector('.missileTire');
+    //     missileRecupCSS = getComputedStyle(cibleMissile);
+    //     positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
+    //     positionMissileY += 2;
+    //     missile.style.top = positionMissileY + 'px';
+    //     //destruction mmissile en bas
+    //     if(positionMissileY >= 600){
+    //         cible.removeChild(missile);
+    //         missilePresent = false;
+    //     }
+    // }
 
 }
 function ennemi_F(){
+    //Ztotal = parseInt(tablMonstre)+nbreMonstre;
     for(var j=0; j<tablMonstre.length; j++){
         //recup valeur ennemi
         cibleEnnemi= document.querySelector('#monstre'+j);
         ennemiRecupCSS = getComputedStyle(cibleEnnemi);
         topEnnemi = parseInt(ennemiRecupCSS.top.replace("px", ""));
         topEnnemi += -2;
+        console.log("monstre numero  " + j);
         //deplacement
         cibleEnnemi.style.top = topEnnemi + 'px';
         //affichage si sort du haut de la zone de jeu
@@ -219,12 +262,14 @@ function collision(){
         if((topEnnemi < aliceBottom) && (topEnnemi > aliceTop)){
             if((droitEnnemi>aliceGauche) && (droitEnnemi<aliceDroit) ||
                 (leftEnnemi>aliceGauche) && (leftEnnemi<aliceDroit)){
+                    // partieEnCours = false;
                     youLoose();
             }
         }
         if((bottomEnnemi < aliceBottom) && (bottomEnnemi > aliceTop)){
             if((droitEnnemi>aliceGauche) && (droitEnnemi<aliceDroit) ||
                 (leftEnnemi>aliceGauche) && (leftEnnemi<aliceDroit)){
+                    // partieEnCours = false;
                     youLoose();
             }
         }
@@ -241,7 +286,7 @@ function collision(){
             droitMissile = gaucheMissile + largeurMissile;
             //collision
             if((topEnnemi < bottomMissile) && (topEnnemi > topMissile)){
-                if((gaucheMissile > leftEnnemi) && (gaucheMissile < droitEnnemi)){
+                if((gaucheMissile > leftEnnemi-largeurMissile) && (droitMissile < droitEnnemi+largeurMissile)){
                     //replacement ennemi
                     cibleEnnemi= document.querySelector('#monstre'+k);
                     ennemiRecupCSS = getComputedStyle(cibleEnnemi);
@@ -253,12 +298,13 @@ function collision(){
                     cible.removeChild(missile);
                     missilePresent = false;
                     compteurScore += pointMonstre;
+                    console.log(compteurScore);
                     //augmentation du nbre de monstre en fct du score
                     //faire un modulo par 100, reste =0
-                    if(compteurScore === 50 || compteurScore === 70 || compteurScore || 100){
-                        //nbreMonstre
-                        //console.log(nbreMonstre);
-                    }
+                    // if(compteurScore === 50){
+                    //     nbreMonstre+=2;
+                    //     console.log(nbreMonstre);
+                    // }
 
                 }
             }
@@ -268,14 +314,23 @@ function collision(){
 }
 function youLoose(){
     console.log("you loooose");
-    //tempsFinJeux = Date.now();
+    tempsFinJeux = Date.now();
     partieEnCours = false;
     //console.log(dureeJeux);
     //console.log(compteurScore);
-    //dureeJeux = tempsFinJeux - tempsDebutJeux;
-    //console.log(dureeJeux);
+    dureeJeux = tempsFinJeux - tempsDebutJeux;
+    // console.log(dureeJeux);
 }
 
-loop();
-// ### FIN DU DOMContentLoaded ############################
+//loop();
+var demarrer = document.querySelector('input[type=button]');
+demarrer.addEventListener('click', function(){
+     loop();
+    // ## TIMESTAMP ####################################
+    tempsDebutJeux = Date.now();
+});
+
+
+
+// // ### FIN DU DOMContentLoaded ############################
 });
