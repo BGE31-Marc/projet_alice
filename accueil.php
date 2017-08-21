@@ -17,7 +17,7 @@
                 <input type="password" name="mdp" placeholder="mot de passe">
 
                      <div class="message">
-                         <?php if(isset($message)){echo $message;} ?>
+                         <?php //if(isset($message)){echo $message;} ?>
                          <!-- pseudo utilisateur deja pris. Merci de changer. -->
                      </div>
 

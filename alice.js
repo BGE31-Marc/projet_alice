@@ -12,6 +12,9 @@ var positionMaxi;
 //## DEPLACEMENT DU DECORS##
 var bg_Y = 0;
 var bordure_Y = 0;
+
+
+
 //## DEPLACEMENT ALICE ##
 var alice = document.querySelector('#alice');
 var aliceRecupCSS = getComputedStyle(alice);
@@ -38,7 +41,7 @@ var droitMissile;
 var gaucheMissile;
 // ## GESTION D UN ENNEMI
 var tablMonstre = [];
-var nbreMonstre = 5;
+var nbreMonstre = 2;
 var enHaut;
 var agauche;
 var hauteur;
@@ -56,11 +59,11 @@ for(var i=0; i<nbreMonstre; i++){
     ennemi = document.createElement('div');
     ennemi.setAttribute('class', 'ennemiFabrique');
     ennemi.setAttribute('id', 'monstre'+i);
-    ennemi.style.top = -90 + 'px' ;
+    ennemi.style.top = -110 + 'px' ;
     positionEnnemiAleaX = Math.floor(Math.random() * 600) + 100;
     ennemi.style.left = positionEnnemiAleaX + 'px' ;
-    // numEnnemi = Math.floor(Math.random() * 3) + 1;
-    // ennemi.style.backgroundImage="url('images/ennemi1.png')";
+    numEnnemi = Math.floor(Math.random() * 4) + 1;
+    ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
     //on ajoute l'ennemi dans le DOM
     cible.appendChild(ennemi);
     //on recupere l'ennemi en question et ces proprietes CSS
@@ -71,12 +74,18 @@ for(var i=0; i<nbreMonstre; i++){
     leftEnnemi = parseInt(ennemiRecupCSS.left.replace("px", ""));
     hauteurEnnemi = parseInt(ennemiRecupCSS.height.replace("px", ""));
     largeurEnnemi = parseInt(ennemiRecupCSS.width.replace("px", ""));
-    vitesseAlea =  Math.floor(Math.random())+1; // pas entre 1 et 2
+    // var vitesse;
+    // var vitesseAlea;
+
+vitesseAlea = Math.floor(Math.random() * 4) + 1;
+
     tablMonstre[i]= {   'enHaut':topEnnemi,
                         'agauche':leftEnnemi,
                         'hauteur': hauteurEnnemi,
                         'largeur':largeurEnnemi,
-                        'pasDeplacement':vitesseAlea};
+                        'pasDeplacement':vitesseAlea,
+                        'imageStyle':numEnnemi,
+                        'vitesse':vitesseAlea};
 }
 //## GESTION DES COLLISIONS
 //## GESTION DU TEMPS
@@ -84,12 +93,7 @@ var tempsDebutJeux;
 var tempsFinJeux;
 //## LANCEMENT DU JEU
 var partieEnCours = true;
-// var demarrer = document.querySelector('input[type=button]');
-// demarrer.addEventListener('click', function(){
-//     loop();
-    // ## TIMESTAMP ####################################
-    //tempsDebutJeux = Date.now();
-// });
+var boutonStart;
 //## COMPTEUR DE POINTS
 var compteurScore = 0;
 var pointMonstre = 10;
@@ -100,33 +104,28 @@ var dureeJeux;
 gestion_Clavier();
 // ## FONCTION LOOP ################################################
 function loop(){
-
     //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE
     positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
     tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
     positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
     // deplacement_bg();
         //defini le pas de defilement
-        bg_Y -= 1;
-        //on replace le bg
-        if(bg_Y >= 600) {bg_Y = 0;}
-        //on redessinne
-        zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
+    bg_Y -= 1;
+    //on replace le bg
+    if(bg_Y >= 600) {bg_Y = 0;}
+    //on redessinne
+    zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
     // deplacement_bordure();
             //on definie le pas
-            bordure_Y -= 2;
-            //on replace l'image
-            if(bordure_Y >= 600) {bordure_Y = 0;}
-            //on redessinne les 2 bordures
-            bordureG.style.backgroundPositionY = bordure_Y + 'px';
-            bordureD.style.backgroundPositionY = bordure_Y + 'px';
-
-
-
+    bordure_Y -= 2;
+    //on replace l'image
+    if(bordure_Y >= 600) {bordure_Y = 0;}
+    //on redessinne les 2 bordures
+    bordureG.style.backgroundPositionY = bordure_Y + 'px';
+    bordureD.style.backgroundPositionY = bordure_Y + 'px';
 
     deplacement_Alice();
-    // missile_F();
-
+    vitesse = -2;
     if(missilePresent){
         //deplacement
         cibleMissile = document.querySelector('.missileTire');
@@ -140,10 +139,8 @@ function loop(){
             missilePresent = false;
         }
     }
-
     ennemi_F();
     collision();
-    // console.log(partieEnCours);
     //# REFRESH
     if(partieEnCours){
         requestAnimationFrame(loop);
@@ -151,23 +148,6 @@ function loop(){
 
 }
 //## FONCTIONS JEUX ################################################
-function deplacement_bg(){
-    // //defini le pas de defilement
-    // bg_Y -= 1;
-    // //on replace le bg
-    // if(bg_Y >= 600) {bg_Y = 0;}
-    // //on redessinne
-    // zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
-}
-function deplacement_bordure(){
-    //on definie le pas
-    // bordure_Y -= 2;
-    // //on replace l'image
-    // if(bordure_Y >= 600) {bordure_Y = 0;}
-    // //on redessinne les 2 bordures
-    // bordureG.style.backgroundPositionY = bordure_Y + 'px';
-    // bordureD.style.backgroundPositionY = bordure_Y + 'px';
-}
 function gestion_Clavier() {
   // Détection de touche enfoncée
   document.addEventListener('keydown', function(event) {
@@ -193,8 +173,6 @@ function deplacement_Alice(){
     alice.style.left = posAlice + 'px';
 }
 function missile_F(){
-    //detection de la touche espace et creation d'un missile
-
         missilePresent = true;
         positionMissileX = posAlice + demialiceWidth -10;
         missile = document.createElement('div');
@@ -202,42 +180,28 @@ function missile_F(){
         missile.style.top = 100 + 'px';
         missile.style.left = positionMissileX + 'px';
         cible.appendChild(missile);
-    // }
-    //deplacement du missile et destruction
-    // if(missilePresent){
-    //     //deplacement
-    //     cibleMissile = document.querySelector('.missileTire');
-    //     missileRecupCSS = getComputedStyle(cibleMissile);
-    //     positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
-    //     positionMissileY += 2;
-    //     missile.style.top = positionMissileY + 'px';
-    //     //destruction mmissile en bas
-    //     if(positionMissileY >= 600){
-    //         cible.removeChild(missile);
-    //         missilePresent = false;
-    //     }
-    // }
 
 }
 function ennemi_F(){
-    //Ztotal = parseInt(tablMonstre)+nbreMonstre;
     for(var j=0; j<tablMonstre.length; j++){
         //recup valeur ennemi
         cibleEnnemi= document.querySelector('#monstre'+j);
         ennemiRecupCSS = getComputedStyle(cibleEnnemi);
         topEnnemi = parseInt(ennemiRecupCSS.top.replace("px", ""));
-        topEnnemi += -2;
-        console.log("monstre numero  " + j);
+        vitesse--;
+        topEnnemi += vitesse;
         //deplacement
         cibleEnnemi.style.top = topEnnemi + 'px';
         //affichage si sort du haut de la zone de jeu
-        if(topEnnemi < -100){
+        if(topEnnemi < -150){
             nouvellePositionEnnemi = Math.floor(Math.random()*700)+100;
             cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
             nouvellePositionEnnemiTop = Math.floor(Math.random()*800)+600;
             cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
-            topEnnemi += -(Math.floor(Math.random()*100)+1);
-            tablMonstre[j]= {'enHaut': topEnnemi};
+            topEnnemi += -(Math.round(Math.random()*100)+1);
+            numEnnemi = Math.floor(Math.random() * 4) + 1;
+            ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
+            tablMonstre[j]= {'enHaut': topEnnemi, 'imageStyle': numEnnemi};
         }
     }
 
@@ -294,6 +258,7 @@ function collision(){
                     cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
                     nouvellePositionEnnemiTop = Math.floor(Math.random()*800)+600;
                     cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
+
                     //effacement missile
                     cible.removeChild(missile);
                     missilePresent = false;
@@ -305,6 +270,8 @@ function collision(){
                     //     nbreMonstre+=2;
                     //     console.log(nbreMonstre);
                     // }
+                    // ## TEST score
+
 
                 }
             }
@@ -323,13 +290,14 @@ function youLoose(){
 }
 
 //loop();
-var demarrer = document.querySelector('input[type=button]');
-demarrer.addEventListener('click', function(){
-     loop();
+boutonStart = document.querySelector('input[type=button]');
+boutonStart.addEventListener('click', function(){
+    bordureD.removeChild(boutonStart);
+    loop();
     // ## TIMESTAMP ####################################
     tempsDebutJeux = Date.now();
 });
-
+// boutonStart.addEventListener('click', loop());
 
 
 // // ### FIN DU DOMContentLoaded ############################

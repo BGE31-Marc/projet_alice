@@ -1,7 +1,7 @@
 <?php
 
-if($connexion){
-   $connexion = NULL;
-}
+// if($connexion){
+//    $connexion = NULL;
+// }
 
  ?>

@@ -56,7 +56,7 @@ input[value='start']{width: 100px; height: 100px; margin-left: 100px;margin-top:
 .ennemiFabrique{
     width: 100px;
     height: 100px;
-    background-image: url('images/ennemi1.png');
+    /*background-image: url('images/ennemi1.png');*/
     background-size: cover;
     position: absolute;
     /*background-color: purple;*/
