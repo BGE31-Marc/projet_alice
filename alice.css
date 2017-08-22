@@ -21,7 +21,7 @@
     height: 600px;;
     top: 0;
     left : 900px;
-    background-image: url('images/zoneDeJeux.jpg');
+    /*background-image: url('images/zoneDeJeux.jpg');*/
     position: absolute;
     background-image: url('images/bordure.jpg');
     box-shadow: -5px 0px 250px #111;
@@ -55,8 +55,8 @@ input[value='start']{width: 100px; height: 100px; margin-left: 10px;margin-top: 
     /*background-color: pink;*/
 }
 .ennemiFabrique{
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     /*background-image: url('images/ennemi1.png');*/
     background-size: cover;
     position: absolute;
@@ -64,7 +64,8 @@ input[value='start']{width: 100px; height: 100px; margin-left: 10px;margin-top: 
 }
 
 .message{width: 200px; height: 40px; background-color: inherit; color: white;text-align: center;margin: auto;}
-
+.levelUp{background-color: inherit;color: white;text-align: center; font-size: 60px;font-weight: 600;position: absolute; width: 100%;    visibility: hidden;}
+.score{width: 100%; background-color: inherit; text-align: left; height: 40px; color: white; font-size: 30px; font-family: 'arial';}
 /**/
 /*## PAGE ACCUEIL##################################################################*/
 body{ font-family: arial;text-shadow: 5px 5px 100px rgba(255,255,255,1);}

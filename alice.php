@@ -14,16 +14,15 @@
     </head>
     <body>
         <div class="jeuxALICE">
+
             <div id="zoneDeJeux"></div>
             <div id="bordureG"></div>
             <div id="bordureD">
-                <?php //if(isset($message)){
-                    ?>
-                    <div class="message"><?php //echo $message; ?></div>
-                <?php// } ?>
+                <div class="score"></div>
                 <input type="button" name="" value="start">
             </div>
             <div id="alice"></div>
+            <div class="levelUp">LEVEL UP !</div>
         </div>
 
     </body>

@@ -12,9 +12,6 @@ var positionMaxi;
 //## DEPLACEMENT DU DECORS##
 var bg_Y = 0;
 var bordure_Y = 0;
-
-
-
 //## DEPLACEMENT ALICE ##
 var alice = document.querySelector('#alice');
 var aliceRecupCSS = getComputedStyle(alice);
@@ -52,6 +49,15 @@ var cibleEnnemi;var ennemiRecupCSS;
 var topEnnemi;var leftEnnemi;var hauteurEnnemi;var largeurEnnemi;
 var droitEnnemi; var bottomEnnemi;
 var numEnnemi;
+//## affichage du level
+var levelUp;
+var cibleLevelUp = document.querySelector(".levelUp");
+var levelUpRecupCSS = getComputedStyle(cibleLevelUp);
+//##affichage du score des monstres
+var affiche_score;
+var cibleAfficheScore = document.querySelector(".score");
+var afficheScoreRecupCSS = getComputedStyle(cibleAfficheScore);
+
 // ## GENERATION DES MONSTRES ######################################
 for(var i=0; i<nbreMonstre; i++){
     //on fabrique un ennemi, on defini ces proprietes
@@ -61,10 +67,8 @@ for(var i=0; i<nbreMonstre; i++){
     ennemi.style.top = -110 + 'px' ;
     positionEnnemiAleaX = Math.floor(Math.random() * 600) + 100;
     ennemi.style.left = positionEnnemiAleaX + 'px' ;
-
     numEnnemi = Math.floor(Math.random() * 4) + 1;
     ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
-
     //on ajoute l'ennemi dans le DOM
     cible.appendChild(ennemi);
     //on recupere l'ennemi en question et ces proprietes CSS
@@ -75,11 +79,7 @@ for(var i=0; i<nbreMonstre; i++){
     leftEnnemi = parseInt(ennemiRecupCSS.left.replace("px", ""));
     hauteurEnnemi = parseInt(ennemiRecupCSS.height.replace("px", ""));
     largeurEnnemi = parseInt(ennemiRecupCSS.width.replace("px", ""));
-    // var vitesse;
-    // var vitesseAlea;
-
-vitesseAlea = Math.floor(Math.random() * 4) + 1;
-
+    vitesseAlea = Math.floor(Math.random() * 4) + 1;
     tablMonstre[i]= {   'enHaut':topEnnemi,
                         'agauche':leftEnnemi,
                         'hauteur': hauteurEnnemi,
@@ -105,6 +105,7 @@ var score_total;
 gestion_Clavier();
 // ## FONCTION LOOP ################################################
 function loop(){
+    cibleAfficheScore.textContent = "Votre score " + compteurScore;
     //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE
     positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
     tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
@@ -124,7 +125,6 @@ function loop(){
     //on redessinne les 2 bordures
     bordureG.style.backgroundPositionY = bordure_Y + 'px';
     bordureD.style.backgroundPositionY = bordure_Y + 'px';
-
     deplacement_Alice();
     vitesse = -2;
     if(missilePresent){
@@ -223,24 +223,24 @@ function collision(){
         bottomEnnemi = topEnnemi + hauteurEnnemi;
         //collision alice // ennemi
         //collision sur le haut ennemi
-        if((topEnnemi < aliceBottom) && (topEnnemi > aliceTop)){
-            if((droitEnnemi>aliceGauche) && (droitEnnemi<aliceDroit) ||
-                (leftEnnemi>aliceGauche) && (leftEnnemi<aliceDroit)){
+        if((topEnnemi < aliceBottom-20) && (topEnnemi > aliceTop)){
+            if((droitEnnemi-20>aliceGauche) && (droitEnnemi-20<aliceDroit) ||
+                (leftEnnemi+20>aliceGauche) && (leftEnnemi+20<aliceDroit)){
                     // partieEnCours = false;
                     youLoose();
             }
         }
         //collision bas ennemi
-        if((bottomEnnemi < aliceBottom) && (bottomEnnemi > aliceTop)){
-            if((droitEnnemi>aliceGauche) && (droitEnnemi<aliceDroit) ||
-                (leftEnnemi>aliceGauche) && (leftEnnemi<aliceDroit)){
+        if((bottomEnnemi < aliceBottom-20) && (bottomEnnemi > aliceTop)){
+            if((droitEnnemi-20>aliceGauche) && (droitEnnemi-20<aliceDroit) ||
+                (leftEnnemi+20>aliceGauche) && (leftEnnemi+20<aliceDroit)){
                     // partieEnCours = false;
                     youLoose();
             }
         }
         //collision dim alice a l'interieur de l'ennemi
-        if (topEnnemi<aliceBottom && bottomEnnemi>aliceTop) {
-            if(leftEnnemi<aliceGauche && droitEnnemi>aliceDroit){console.log("collision dessus alice milieu de ennemi"); youLoose();}
+        if (topEnnemi<aliceBottom-20 && bottomEnnemi>aliceTop) {
+            if(leftEnnemi+20<aliceGauche && droitEnnemi-20>aliceDroit){console.log("collision dessus alice milieu de ennemi"); youLoose();}
         }
         //test existance missile
         cibleMissile = document.querySelector('.missileTire');
@@ -263,16 +263,14 @@ function collision(){
                     cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
                     nouvellePositionEnnemiTop = Math.floor(Math.random()*600)+800;
                     cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
-
-
-
-                    // numEnnemi = Math.floor(Math.random() * 4) + 1;
-                    // ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
                     //effacement missile
                     cible.removeChild(missile);
                     missilePresent = false;
                     compteurScore += pointMonstre;
                     console.log(compteurScore);
+                    if(compteurScore%100 == 0){
+                        cibleLevelUp.style.visibility = "visible";
+                    }else{cibleLevelUp.style.visibility = "hidden";}
                 }
             }
         //fin test existance missile
@@ -283,14 +281,6 @@ function youLoose(){
     tempsFinJeux = Date.now();
     partieEnCours = false;
     dureeJeux = Math.round((tempsFinJeux - tempsDebutJeux)/1000);
-
-
-    affiche_score = document.createElement('div');
-    affiche_score.style.color = 'white';
-    affiche_score.style.fontFamiy = 'arial';
-    affiche_score.style.fontSize = 30 + 'px';
-    affiche_score.textContent = "Votre score de monstres " + compteurScore;
-    bordureD.appendChild(affiche_score);
     affiche_temps = document.createElement('div');
     affiche_temps.style.color = 'white';
     affiche_temps.style.fontSize = 30 + 'px';
@@ -299,20 +289,20 @@ function youLoose(){
     bordureD.appendChild(affiche_temps);
     score_total= document.createElement('div');
     score_total.style.color = 'white';
-    score_total.style.fontSize = 30 + 'px';
+    score_total.style.fontSize = 35 + 'px';
     score_total.style.fontFamiy = 'arial';
-    score_total.textContent = "Score final " + (dureeJeux + compteurScore);
+    score_total.textContent = "SCORE FINAL " + (dureeJeux + compteurScore);
     bordureD.appendChild(score_total);
+    boutonStart.style.display = "block";
 }
 
 boutonStart = document.querySelector('input[type=button]');
 boutonStart.addEventListener('click', function(){
-    bordureD.removeChild(boutonStart);
+    // bordureD.removeChild(boutonStart);
+    boutonStart.style.display = "none";
     loop();
     // ## TIMESTAMP ####################################
     tempsDebutJeux = Date.now();
 });
-
-
 // // ### FIN DU DOMContentLoaded ############################
 });
