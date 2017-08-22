@@ -41,7 +41,7 @@ var droitMissile;
 var gaucheMissile;
 // ## GESTION D UN ENNEMI
 var tablMonstre = [];
-var nbreMonstre = 2;
+var nbreMonstre = 5;
 var enHaut;
 var agauche;
 var hauteur;
@@ -62,8 +62,10 @@ for(var i=0; i<nbreMonstre; i++){
     ennemi.style.top = -110 + 'px' ;
     positionEnnemiAleaX = Math.floor(Math.random() * 600) + 100;
     ennemi.style.left = positionEnnemiAleaX + 'px' ;
+
     numEnnemi = Math.floor(Math.random() * 4) + 1;
     ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
+
     //on ajoute l'ennemi dans le DOM
     cible.appendChild(ennemi);
     //on recupere l'ennemi en question et ces proprietes CSS
@@ -83,7 +85,6 @@ vitesseAlea = Math.floor(Math.random() * 4) + 1;
                         'agauche':leftEnnemi,
                         'hauteur': hauteurEnnemi,
                         'largeur':largeurEnnemi,
-                        'pasDeplacement':vitesseAlea,
                         'imageStyle':numEnnemi,
                         'vitesse':vitesseAlea};
 }
@@ -98,8 +99,9 @@ var boutonStart;
 var compteurScore = 0;
 var pointMonstre = 10;
 var dureeJeux;
-
-
+var affiche_score;
+var affiche_temps;
+var score_total;
 
 gestion_Clavier();
 // ## FONCTION LOOP ################################################
@@ -131,7 +133,7 @@ function loop(){
         cibleMissile = document.querySelector('.missileTire');
         missileRecupCSS = getComputedStyle(cibleMissile);
         positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
-        positionMissileY += 2;
+        positionMissileY += 10;
         missile.style.top = positionMissileY + 'px';
         //destruction mmissile en bas
         if(positionMissileY >= 600){
@@ -196,12 +198,14 @@ function ennemi_F(){
         if(topEnnemi < -150){
             nouvellePositionEnnemi = Math.floor(Math.random()*700)+100;
             cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
-            nouvellePositionEnnemiTop = Math.floor(Math.random()*800)+600;
+            nouvellePositionEnnemiTop = Math.floor(Math.random()*600)+800;
             cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
             topEnnemi += -(Math.round(Math.random()*100)+1);
-            numEnnemi = Math.floor(Math.random() * 4) + 1;
-            ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
-            tablMonstre[j]= {'enHaut': topEnnemi, 'imageStyle': numEnnemi};
+
+
+            // numEnnemi = Math.floor(Math.random() * 4) + 1;
+            // ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
+            tablMonstre[j]= {'enHaut': topEnnemi};
         }
     }
 
@@ -256,23 +260,18 @@ function collision(){
                     ennemiRecupCSS = getComputedStyle(cibleEnnemi);
                     nouvellePositionEnnemi = Math.floor(Math.random()*700)+100;
                     cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
-                    nouvellePositionEnnemiTop = Math.floor(Math.random()*800)+600;
+                    nouvellePositionEnnemiTop = Math.floor(Math.random()*600)+800;
                     cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
 
+
+
+                    // numEnnemi = Math.floor(Math.random() * 4) + 1;
+                    // ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
                     //effacement missile
                     cible.removeChild(missile);
                     missilePresent = false;
                     compteurScore += pointMonstre;
                     console.log(compteurScore);
-                    //augmentation du nbre de monstre en fct du score
-                    //faire un modulo par 100, reste =0
-                    // if(compteurScore === 50){
-                    //     nbreMonstre+=2;
-                    //     console.log(nbreMonstre);
-                    // }
-                    // ## TEST score
-
-
                 }
             }
         //fin test existance missile
@@ -280,16 +279,31 @@ function collision(){
     }
 }
 function youLoose(){
-    console.log("you loooose");
     tempsFinJeux = Date.now();
     partieEnCours = false;
-    //console.log(dureeJeux);
-    //console.log(compteurScore);
-    dureeJeux = tempsFinJeux - tempsDebutJeux;
-    // console.log(dureeJeux);
+    dureeJeux = Math.round((tempsFinJeux - tempsDebutJeux)/1000);
+
+
+    affiche_score = document.createElement('div');
+    affiche_score.style.color = 'white';
+    affiche_score.style.fontFamiy = 'arial';
+    affiche_score.style.fontSize = 30 + 'px';
+    affiche_score.textContent = "Votre score de monstres " + compteurScore;
+    bordureD.appendChild(affiche_score);
+    affiche_temps = document.createElement('div');
+    affiche_temps.style.color = 'white';
+    affiche_temps.style.fontSize = 30 + 'px';
+    affiche_temps.style.fontFamiy = 'arial';
+    affiche_temps.textContent = "Votre bonus temps " + dureeJeux;
+    bordureD.appendChild(affiche_temps);
+    score_total= document.createElement('div');
+    score_total.style.color = 'white';
+    score_total.style.fontSize = 30 + 'px';
+    score_total.style.fontFamiy = 'arial';
+    score_total.textContent = "Score final " + (dureeJeux + compteurScore);
+    bordureD.appendChild(score_total);
 }
 
-//loop();
 boutonStart = document.querySelector('input[type=button]');
 boutonStart.addEventListener('click', function(){
     bordureD.removeChild(boutonStart);
@@ -297,7 +311,6 @@ boutonStart.addEventListener('click', function(){
     // ## TIMESTAMP ####################################
     tempsDebutJeux = Date.now();
 });
-// boutonStart.addEventListener('click', loop());
 
 
 // // ### FIN DU DOMContentLoaded ############################
