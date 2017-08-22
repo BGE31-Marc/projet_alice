@@ -37,6 +37,7 @@ input[value='start']{width: 100px; height: 100px; margin-left: 10px;margin-top: 
     background-image: url('images/alice3.png');
     /*background-size: cover;*/
     position: absolute;
+    /*background-color: blue;*/
     /*background: url("images/sprite_ken.png");
 	animation: spriteanimation 0.5s steps(10) infinite;
 	transform:scaleX(-1);*/

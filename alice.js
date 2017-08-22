@@ -25,7 +25,6 @@ var touche = [];
 var aliceHeight = parseInt(aliceRecupCSS.height.replace("px", ""));
 var demialiceWidth = aliceWidth/2;
 var aliceTop; var aliceBottom; var aliceDroit; var aliceGauche;
-// console.log(aliceDroit);
 // ## GESTION DU MISSILE
 var missilePresent = false;
 var cibleMissile;
@@ -111,7 +110,7 @@ function loop(){
     tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
     positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
     // deplacement_bg();
-        //defini le pas de defilement
+    //defini le pas de defilement
     bg_Y -= 1;
     //on replace le bg
     if(bg_Y >= 600) {bg_Y = 0;}
@@ -201,10 +200,6 @@ function ennemi_F(){
             nouvellePositionEnnemiTop = Math.floor(Math.random()*600)+800;
             cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
             topEnnemi += -(Math.round(Math.random()*100)+1);
-
-
-            // numEnnemi = Math.floor(Math.random() * 4) + 1;
-            // ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
             tablMonstre[j]= {'enHaut': topEnnemi};
         }
     }
@@ -227,6 +222,7 @@ function collision(){
         hauteurEnnemi = parseInt(ennemiRecupCSS.height.replace("px",""));
         bottomEnnemi = topEnnemi + hauteurEnnemi;
         //collision alice // ennemi
+        //collision sur le haut ennemi
         if((topEnnemi < aliceBottom) && (topEnnemi > aliceTop)){
             if((droitEnnemi>aliceGauche) && (droitEnnemi<aliceDroit) ||
                 (leftEnnemi>aliceGauche) && (leftEnnemi<aliceDroit)){
@@ -234,12 +230,17 @@ function collision(){
                     youLoose();
             }
         }
+        //collision bas ennemi
         if((bottomEnnemi < aliceBottom) && (bottomEnnemi > aliceTop)){
             if((droitEnnemi>aliceGauche) && (droitEnnemi<aliceDroit) ||
                 (leftEnnemi>aliceGauche) && (leftEnnemi<aliceDroit)){
                     // partieEnCours = false;
                     youLoose();
             }
+        }
+        //collision dim alice a l'interieur de l'ennemi
+        if (topEnnemi<aliceBottom && bottomEnnemi>aliceTop) {
+            if(leftEnnemi<aliceGauche && droitEnnemi>aliceDroit){console.log("collision dessus alice milieu de ennemi"); youLoose();}
         }
         //test existance missile
         cibleMissile = document.querySelector('.missileTire');
