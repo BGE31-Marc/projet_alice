@@ -59,6 +59,10 @@ var cibleAfficheScore = document.querySelector(".score");
 var afficheScoreRecupCSS = getComputedStyle(cibleAfficheScore);
 
 // ## GENERATION DES MONSTRES ######################################
+
+// var compteurLevel = 1;
+
+
 for(var i=0; i<nbreMonstre; i++){
     //on fabrique un ennemi, on defini ces proprietes
     ennemi = document.createElement('div');
@@ -87,6 +91,9 @@ for(var i=0; i<nbreMonstre; i++){
                         'imageStyle':numEnnemi,
                         'vitesse':vitesseAlea};
 }
+
+
+
 //## GESTION DES COLLISIONS
 //## GESTION DU TEMPS
 var tempsDebutJeux;
@@ -267,9 +274,11 @@ function collision(){
                     cible.removeChild(missile);
                     missilePresent = false;
                     compteurScore += pointMonstre;
-                    console.log(compteurScore);
-                    if(compteurScore%100 == 0){
+                    // console.log(compteurScore);
+                    if(compteurScore%20 == 0){
+                        cibleLevelUp.style.opacity = 0.3;
                         cibleLevelUp.style.visibility = "visible";
+                        // compteurLevel++;
                     }else{cibleLevelUp.style.visibility = "hidden";}
                 }
             }
@@ -281,24 +290,46 @@ function youLoose(){
     tempsFinJeux = Date.now();
     partieEnCours = false;
     dureeJeux = Math.round((tempsFinJeux - tempsDebutJeux)/1000);
+
+
+    // button_start = document.createElement('div');
+    // button_start.setAttribute('class', 'start');
+    // button_start.style.color = 'white';
+    // button_start.style.fontSize = 30 + 'px';
+    // button_start.style.fontFamiy = 'arial';
+    // button_start.textContent = "rejouer";
+    //bordureD.appendChild(button_start);
+
+    //ciblage du input
+    var cibleInput = document.querySelector('input');
+
     affiche_temps = document.createElement('div');
+    affiche_temps.setAttribute('class', 'temps');
     affiche_temps.style.color = 'white';
     affiche_temps.style.fontSize = 30 + 'px';
     affiche_temps.style.fontFamiy = 'arial';
     affiche_temps.textContent = "Votre bonus temps " + dureeJeux;
-    bordureD.appendChild(affiche_temps);
+    // bordureD.appendChild(affiche_temps);
+    document.querySelector('#bordureD').insertBefore(affiche_temps, cibleInput);
+
     score_total= document.createElement('div');
+    score_total.setAttribute('class', 'score');
     score_total.style.color = 'white';
     score_total.style.fontSize = 35 + 'px';
     score_total.style.fontFamiy = 'arial';
     score_total.textContent = "SCORE FINAL " + (dureeJeux + compteurScore);
-    bordureD.appendChild(score_total);
-    boutonStart.style.display = "block";
+    // bordureD.appendChild(score_total);
+    document.querySelector('#bordureD').insertBefore(score_total, cibleInput);
+
+    // boutonStart.style.display = "block";
+    bordureD.appendChild(boutonStart);
+
+
 }
 
 boutonStart = document.querySelector('input[type=button]');
 boutonStart.addEventListener('click', function(){
-    // bordureD.removeChild(boutonStart);
+    bordureD.removeChild(boutonStart);
     boutonStart.style.display = "none";
     loop();
     // ## TIMESTAMP ####################################

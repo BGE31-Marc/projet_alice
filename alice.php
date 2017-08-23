@@ -14,7 +14,6 @@
     </head>
     <body>
         <div class="jeuxALICE">
-
             <div id="zoneDeJeux"></div>
             <div id="bordureG"></div>
             <div id="bordureD">
