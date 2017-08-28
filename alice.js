@@ -4,6 +4,7 @@ var zoneDeJeux = document.querySelector('#zoneDeJeux');
 var bordureG = document.querySelector('#bordureG');
 var bordureD = document.querySelector('#bordureD');
 var cible = document.querySelector('.jeuxALICE');
+
 // ## taille de le zone de jeux
 var zoneDeJeuxRecupCSS = getComputedStyle(zoneDeJeux);
 var positionMini;
@@ -49,20 +50,20 @@ var cibleEnnemi;var ennemiRecupCSS;
 var topEnnemi;var leftEnnemi;var hauteurEnnemi;var largeurEnnemi;
 var droitEnnemi; var bottomEnnemi;
 var numEnnemi;
-//## affichage du level
-var levelUp;
-var cibleLevelUp = document.querySelector(".levelUp");
-var levelUpRecupCSS = getComputedStyle(cibleLevelUp);
-//##affichage du score des monstres
+//## AFFICHAGE LEVEL
+// var levelUp;
+// var cibleLevelUp = document.querySelector(".levelUp");
+// var levelUpRecupCSS = getComputedStyle(cibleLevelUp);
+//##AFFICHAGE DU SCORE MONSTRES
 var affiche_score;
 var cibleAfficheScore = document.querySelector(".score");
 var afficheScoreRecupCSS = getComputedStyle(cibleAfficheScore);
-
+var score_final;
+var button_enregistrer;
 // ## GENERATION DES MONSTRES ######################################
 
-// var compteurLevel = 1;
 
-
+//## GENERATION DES MONSTRES DEBUT DE PARTIE
 for(var i=0; i<nbreMonstre; i++){
     //on fabrique un ennemi, on defini ces proprietes
     ennemi = document.createElement('div');
@@ -92,9 +93,6 @@ for(var i=0; i<nbreMonstre; i++){
                         'vitesse':vitesseAlea};
 }
 
-
-
-//## GESTION DES COLLISIONS
 //## GESTION DU TEMPS
 var tempsDebutJeux;
 var tempsFinJeux;
@@ -108,10 +106,14 @@ var dureeJeux;
 var affiche_score;
 var affiche_temps;
 var score_total;
+var scoreFinal;
+
+
 
 gestion_Clavier();
 // ## FONCTION LOOP ################################################
 function loop(){
+    //## AFFICHAGE DU SCORE MONSTRES
     cibleAfficheScore.textContent = "Votre score " + compteurScore;
     //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE
     positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
@@ -125,28 +127,30 @@ function loop(){
     //on redessinne
     zoneDeJeux.style.backgroundPositionY = bg_Y + 'px';
     // deplacement_bordure();
-            //on definie le pas
-    bordure_Y -= 2;
+    //on definie le pas
+    bordure_Y -= 3;
     //on replace l'image
     if(bordure_Y >= 600) {bordure_Y = 0;}
     //on redessinne les 2 bordures
     bordureG.style.backgroundPositionY = bordure_Y + 'px';
     bordureD.style.backgroundPositionY = bordure_Y + 'px';
     deplacement_Alice();
-    vitesse = -2;
+    //deplacement des missiles et destruction si sort de l'écran
     if(missilePresent){
         //deplacement
         cibleMissile = document.querySelector('.missileTire');
         missileRecupCSS = getComputedStyle(cibleMissile);
         positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
-        positionMissileY += 10;
+        positionMissileY += 6;
         missile.style.top = positionMissileY + 'px';
-        //destruction mmissile en bas
+        //destruction missile en bas
         if(positionMissileY >= 600){
             cible.removeChild(missile);
             missilePresent = false;
         }
     }
+    //pas de deplacement des monstres
+    vitesse = -2;
     ennemi_F();
     collision();
     //# REFRESH
@@ -172,17 +176,20 @@ function gestion_Clavier() {
 function deplacement_Alice(){
     // Gestion des touches du clavier -> ondefinie le pas
     if (touche[37]===true && posAlice > positionMini) {
-        posAlice-=5;
+        posAlice-=8;
     }
     if (touche[39]===true && posAlice < positionMaxi) {
-        posAlice+=5;
+        posAlice+=8;
     }
     //on redessine
     alice.style.left = posAlice + 'px';
 }
+
 function missile_F(){
         missilePresent = true;
-        positionMissileX = posAlice + demialiceWidth -10;
+        //positionnement du missile aux pieds d'alice
+        positionMissileX = posAlice + demialiceWidth - 10;
+        //création du missile
         missile = document.createElement('div');
         missile.setAttribute('class', 'missileTire');
         missile.style.top = 100 + 'px';
@@ -196,9 +203,9 @@ function ennemi_F(){
         cibleEnnemi= document.querySelector('#monstre'+j);
         ennemiRecupCSS = getComputedStyle(cibleEnnemi);
         topEnnemi = parseInt(ennemiRecupCSS.top.replace("px", ""));
+        //deplacement
         vitesse--;
         topEnnemi += vitesse;
-        //deplacement
         cibleEnnemi.style.top = topEnnemi + 'px';
         //affichage si sort du haut de la zone de jeu
         if(topEnnemi < -150){
@@ -213,6 +220,7 @@ function ennemi_F(){
 
 }
 function collision(){
+    //on parcours tous les ennemis
     for(var k=0; k<tablMonstre.length ; k++){
         //recup valeur alice
         aliceTop =parseInt(aliceRecupCSS.top.replace("px", ""));
@@ -233,7 +241,6 @@ function collision(){
         if((topEnnemi < aliceBottom-20) && (topEnnemi > aliceTop)){
             if((droitEnnemi-20>aliceGauche) && (droitEnnemi-20<aliceDroit) ||
                 (leftEnnemi+20>aliceGauche) && (leftEnnemi+20<aliceDroit)){
-                    // partieEnCours = false;
                     youLoose();
             }
         }
@@ -241,13 +248,14 @@ function collision(){
         if((bottomEnnemi < aliceBottom-20) && (bottomEnnemi > aliceTop)){
             if((droitEnnemi-20>aliceGauche) && (droitEnnemi-20<aliceDroit) ||
                 (leftEnnemi+20>aliceGauche) && (leftEnnemi+20<aliceDroit)){
-                    // partieEnCours = false;
                     youLoose();
             }
         }
         //collision dim alice a l'interieur de l'ennemi
         if (topEnnemi<aliceBottom-20 && bottomEnnemi>aliceTop) {
-            if(leftEnnemi+20<aliceGauche && droitEnnemi-20>aliceDroit){console.log("collision dessus alice milieu de ennemi"); youLoose();}
+            if(leftEnnemi+20<aliceGauche && droitEnnemi-20>aliceDroit){
+                // console.log("collision dessus alice milieu de ennemi");
+            youLoose();}
         }
         //test existance missile
         cibleMissile = document.querySelector('.missileTire');
@@ -274,12 +282,6 @@ function collision(){
                     cible.removeChild(missile);
                     missilePresent = false;
                     compteurScore += pointMonstre;
-                    // console.log(compteurScore);
-                    if(compteurScore%20 == 0){
-                        cibleLevelUp.style.opacity = 0.3;
-                        cibleLevelUp.style.visibility = "visible";
-                        // compteurLevel++;
-                    }else{cibleLevelUp.style.visibility = "hidden";}
                 }
             }
         //fin test existance missile
@@ -287,50 +289,97 @@ function collision(){
     }
 }
 function youLoose(){
+    //gestion du temps
     tempsFinJeux = Date.now();
     partieEnCours = false;
     dureeJeux = Math.round((tempsFinJeux - tempsDebutJeux)/1000);
-
-
-    // button_start = document.createElement('div');
-    // button_start.setAttribute('class', 'start');
-    // button_start.style.color = 'white';
-    // button_start.style.fontSize = 30 + 'px';
-    // button_start.style.fontFamiy = 'arial';
-    // button_start.textContent = "rejouer";
-    //bordureD.appendChild(button_start);
-
     //ciblage du input
     var cibleInput = document.querySelector('input');
-
+    //score en temps
     affiche_temps = document.createElement('div');
     affiche_temps.setAttribute('class', 'temps');
     affiche_temps.style.color = 'white';
     affiche_temps.style.fontSize = 30 + 'px';
     affiche_temps.style.fontFamiy = 'arial';
     affiche_temps.textContent = "Votre bonus temps " + dureeJeux;
-    // bordureD.appendChild(affiche_temps);
-    document.querySelector('#bordureD').insertBefore(affiche_temps, cibleInput);
-
+    bordureD.appendChild(affiche_temps);
+    //calcul du score final
+    scoreFinal = dureeJeux + compteurScore;
     score_total= document.createElement('div');
-    score_total.setAttribute('class', 'score');
+    score_total.setAttribute('class', 'scoreFinal');
     score_total.style.color = 'white';
     score_total.style.fontSize = 35 + 'px';
     score_total.style.fontFamiy = 'arial';
-    score_total.textContent = "SCORE FINAL " + (dureeJeux + compteurScore);
-    // bordureD.appendChild(score_total);
-    document.querySelector('#bordureD').insertBefore(score_total, cibleInput);
+    score_total.textContent = "SCORE FINAL " + scoreFinal;
+    bordureD.appendChild(score_total);
+    //enregistrement du score / vers php en ajax
+    button_enregistrer = document.createElement('div');
+    button_enregistrer.addEventListener('click', function(){
+        var lesValeurs = "action='saveScore'&score='"+scoreFinal+"'";
+        $.ajax({
+           url:'http://localhost/projet_alice/traitementScore.php',
+           type:'POST',
+           data:lesValeurs,
+           dataType:'json',
+           success: function (data) {
+               alert(data.reponse);
+           },
+           error:function(e){
+               alert("erreur" + e);
+           }
+       });
 
-    // boutonStart.style.display = "block";
-    bordureD.appendChild(boutonStart);
+    });
+    //bouton enregistrer
+    button_enregistrer.setAttribute('class', 'enregistrer');
+    button_enregistrer.style.cursor = 'pointer';
+    button_enregistrer.style.color = 'white';
+    button_enregistrer.style.fontSize = 30 + 'px';
+    button_enregistrer.style.fontFamiy = 'arial';
+    button_enregistrer.textContent = "enregistrer";
+    bordureD.appendChild(button_enregistrer);
+    //bouton rejouer
+    button_restart = document.createElement('div');
+    button_restart.setAttribute('class', 'restart');
+    button_restart.style.color = 'white';
+    button_restart.style.fontSize = 30 + 'px';
+    button_restart.style.fontFamiy = 'arial';
+    button_restart.textContent = "rejouer";
+    bordureD.appendChild(button_restart);
+    //on relance une nouvelle partie
+    button_restart.addEventListener('click', function(){
+        bordureD.removeChild(affiche_temps);
+        bordureD.removeChild(score_total);
+        bordureD.removeChild(button_enregistrer);
+        bordureD.removeChild(button_restart);
+        //destrucion monstres
+        for(var i=0; i<tablMonstre.length; i++){
+            //ciblage des monstres existants
+            cibleEnnemi= document.querySelector('#monstre'+i);
+            ennemiRecupCSS = getComputedStyle(cibleEnnemi);
+            //stock les donnees propres a chaque ennemi dans le tableau -> initialisation du tableau
+            topEnnemi = parseInt(ennemiRecupCSS.top.replace("px", ""));
+            nouvellePositionEnnemiTop = Math.floor(Math.random()*600)+800;
+            cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
+            tablMonstre[i]= {'enHaut':topEnnemi};
+        }
+        //reinitialisation
+        scoreFinal = 0;
+        compteurScore =0;
+        dureeJeux = 0;
+        tempsDebutJeux = Date.now();
+        partieEnCours = true;
 
 
+        //repositionner alice ....
+        loop();
+    });
 }
-
+//coblage du bouton start pour lancement de partie 
 boutonStart = document.querySelector('input[type=button]');
+// lancement dela premiere loop au premier demarage du jeu
 boutonStart.addEventListener('click', function(){
     bordureD.removeChild(boutonStart);
-    boutonStart.style.display = "none";
     loop();
     // ## TIMESTAMP ####################################
     tempsDebutJeux = Date.now();

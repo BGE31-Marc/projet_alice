@@ -1,4 +1,4 @@
-
+<?php session_start(); ?>
 
 <!DOCTYPE html>
 <html>
@@ -7,17 +7,19 @@
         <title>alice</title>
         <link rel="stylesheet" href="alice.css">
 
-
-
-        <script type="text/javascript" src="alice.js"></script>
-        <script type="text/javascript" src="traitement.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="alice.js"></script>
     </head>
+
+
     <body>
         <div class="jeuxALICE">
             <div id="zoneDeJeux"></div>
+
             <div id="bordureG"></div>
             <div id="bordureD">
                 <div class="score"></div>
+                
                 <input type="button" name="" value="start">
             </div>
             <div id="alice"></div>
