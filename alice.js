@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+// console.log(user_pseudo);
+
 // ## DECLARATION DES VARIABLES#####################################
 var zoneDeJeux = document.querySelector('#zoneDeJeux');
 var bordureG = document.querySelector('#bordureG');
@@ -150,7 +153,7 @@ function loop(){
         }
     }
     //pas de deplacement des monstres
-    vitesse = -2;
+    vitesse = -3;
     ennemi_F();
     collision();
     //# REFRESH
@@ -315,7 +318,8 @@ function youLoose(){
     //enregistrement du score / vers php en ajax
     button_enregistrer = document.createElement('div');
     button_enregistrer.addEventListener('click', function(){
-        var lesValeurs = "action='saveScore'&score='"+scoreFinal+"'";
+        var lesValeurs = "action='saveScore'&score="+scoreFinal+"&user_pseudo="+user_pseudo+"&user_email="+user_email+"";
+        console.log(lesValeurs);
         $.ajax({
            url:'http://localhost/projet_alice/traitementScore.php',
            type:'POST',
@@ -375,7 +379,7 @@ function youLoose(){
         loop();
     });
 }
-//coblage du bouton start pour lancement de partie 
+//coblage du bouton start pour lancement de partie
 boutonStart = document.querySelector('input[type=button]');
 // lancement dela premiere loop au premier demarage du jeu
 boutonStart.addEventListener('click', function(){
