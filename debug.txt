@@ -1,1 +1,1 @@
-UPDATE users SET user_score = 57 WHERE  user_email='vic@gmail.com'; 
+UPDATE users SET user_score = 213 WHERE  user_email='domi@gmail.com'; 

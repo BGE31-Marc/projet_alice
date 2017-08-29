@@ -367,6 +367,7 @@ function youLoose(){
             cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
             tablMonstre[i]= {'enHaut':topEnnemi};
         }
+        posAlice.style.left= 475 + 'px';
         //reinitialisation
         scoreFinal = 0;
         compteurScore =0;
@@ -375,13 +376,13 @@ function youLoose(){
         partieEnCours = true;
 
 
-        //repositionner alice ....
+
         loop();
     });
 }
 //coblage du bouton start pour lancement de partie
 boutonStart = document.querySelector('input[type=button]');
-// lancement dela premiere loop au premier demarage du jeu
+// lancement de la premiere loop au premier demarrage du jeu
 boutonStart.addEventListener('click', function(){
     bordureD.removeChild(boutonStart);
     loop();
