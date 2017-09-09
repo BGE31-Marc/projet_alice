@@ -1,1 +1,0 @@
-UPDATE users SET user_score = 213 WHERE  user_email='domi@gmail.com'; 

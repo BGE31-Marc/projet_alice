@@ -66,20 +66,44 @@ var affiche_score;
 var affiche_temps;
 var score_total;
 var scoreFinal;
+var levelUp = 1;
+//## BONUS
+var bonus; // score du random
+//## ETOILE
+var etoile;
+var vitesseEtoile;
+var positionEtoile;
+var cibleEtoile;
+var etoileRecupCSS;
 
 // ## GENERATION DES MONSTRES POO   ######################################
 var tabEnnemi = [];
 var nbreEnnemiDepart =4;
 var nbreEnnemiEnPlus = 0;
 //on peut generer 50 ennemis au debut
-for(i=0; i<20; i++){
+for(i=0; i<50; i++){
     tabEnnemi[i] = new Ennemi(cible, i);
     tabEnnemi[i].create();
 }
+//creation bouton levelup
+level = document.createElement('div');
+level.setAttribute('class', 'level');
+level.style.top = 100 + 'px';
+level.style.left = 100 + 'px';
+
 // nbreEnnemiTotal
 gestion_Clavier();
 function loop (){
-
+//etoile bonus
+bonus = Math.floor(Math.random() * 1000);
+if(bonus<2){
+    //appel createEtoile
+}
+//deplacementEtoile
+//colisionEtoile -> replacementEtoile
+//levelUp
+    level.textContent="Level " + levelUp;
+    bordureD.appendChild(level);
     //on peut changer le nbre ennemi present si levelup
     for(i=0; i<(nbreEnnemiDepart+nbreEnnemiEnPlus); i++){
         tabEnnemi[i].deplaceEnnemi();
@@ -87,7 +111,7 @@ function loop (){
         collision(i);
     }
     cibleAfficheScore.textContent = "Votre score " + compteurScore;
- //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE################################################
+    //## POSITION DE LA ZONE DE JEUX A CHAQUE MOMENT ->REACTUALISEE################################################
        positionMini = parseInt(zoneDeJeuxRecupCSS.left.replace("px", ""));
        tailleZoneDeJeux = parseInt(zoneDeJeuxRecupCSS.width.replace("px", ""));
        positionMaxi = parseInt(positionMini + tailleZoneDeJeux - aliceWidth);
@@ -108,14 +132,14 @@ function loop (){
        bordureD.style.backgroundPositionY = bordure_Y + 'px';
        deplacement_Alice();
 
-//## GESTION DES MISSILES#####################################################################################
+       //## GESTION DES MISSILES#####################################################################################
        //deplacement des missiles et destruction si sort de l'écran
            if(missilePresent){
                //deplacement
                cibleMissile = document.querySelector('.missileTire');
                missileRecupCSS = getComputedStyle(cibleMissile);
                positionMissileY = parseInt(missileRecupCSS.top.replace("px", ""));
-               positionMissileY += 20;
+               positionMissileY += 15;
                missile.style.top = positionMissileY + 'px';
                //destruction missile en bas
                if(positionMissileY >= 600){
@@ -125,11 +149,14 @@ function loop (){
                }
            }
 
+
+
     // console.log(nbreMissilePresent);
     //# REFRESH
       if(partieEnCours){
           requestAnimationFrame(loop);
       }
+//fin de loop
 }
 
 //## FONCTIONS JEUX ################################################
@@ -223,8 +250,9 @@ function collision(k){
                     compteurScore += pointMonstre;
                     // nbreMissilePresent--;
                     if(compteurScore%100 == 0){
-                        if(nbreEnnemiEnPlus<16){
+                        if(nbreEnnemiEnPlus<46){
                             nbreEnnemiEnPlus++;
+                            levelUp++;
                         }
 
                     }
@@ -232,7 +260,7 @@ function collision(k){
             }
         //fin test existance missile
         }
-    //}
+    //}fin de collision
 }
 function youLoose(){
     //gestion du temps
@@ -250,7 +278,7 @@ function youLoose(){
     affiche_temps.textContent = "Votre bonus temps " + dureeJeux;
     bordureD.appendChild(affiche_temps);
     //calcul du score final
-    scoreFinal = dureeJeux + compteurScore;
+    scoreFinal = (dureeJeux*100) + compteurScore;
     score_total= document.createElement('div');
     score_total.setAttribute('class', 'scoreFinal');
     score_total.style.color = 'white';
@@ -260,6 +288,14 @@ function youLoose(){
     bordureD.appendChild(score_total);
     //enregistrement du score / vers php en ajax
     button_enregistrer = document.createElement('div');
+    //bouton enregistrer
+    button_enregistrer.setAttribute('class', 'enregistrer');
+    button_enregistrer.style.cursor = 'pointer';
+    button_enregistrer.style.color = 'white';
+    button_enregistrer.style.fontSize = 30 + 'px';
+    button_enregistrer.style.fontFamiy = 'arial';
+    button_enregistrer.textContent = "enregistrer";
+    bordureD.appendChild(button_enregistrer);
     button_enregistrer.addEventListener('click', function(){
         var lesValeurs = "action='saveScore'&score="+scoreFinal+"&user_pseudo="+user_pseudo+"&user_email="+user_email+"";
         console.log(lesValeurs);
@@ -277,14 +313,6 @@ function youLoose(){
        });
 
     });
-    //bouton enregistrer
-    button_enregistrer.setAttribute('class', 'enregistrer');
-    button_enregistrer.style.cursor = 'pointer';
-    button_enregistrer.style.color = 'white';
-    button_enregistrer.style.fontSize = 30 + 'px';
-    button_enregistrer.style.fontFamiy = 'arial';
-    button_enregistrer.textContent = "enregistrer";
-    bordureD.appendChild(button_enregistrer);
     //bouton rejouer
     button_restart = document.createElement('div');
     button_restart.setAttribute('class', 'restart');
@@ -310,16 +338,16 @@ function youLoose(){
             tabEnnemi[i].create();
         }
 
-        // posAlice.style.left= 475 + 'px';
         //reinitialisation
         scoreFinal = 0;
         compteurScore =0;
         dureeJeux = 0;
         tempsDebutJeux = Date.now();
         partieEnCours = true;
+        levelUp = 1;
 
-//remettre nbre missile a 0
-
+        // alice.style.left = 475 + 'px';
+        //remettre nbre missile a 0
         loop();
     });
 }

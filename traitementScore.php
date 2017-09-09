@@ -16,7 +16,7 @@ if(isset($_POST['action'])){
                 define ('MDP','');
                 // // Création d'un objet PDO et test de la connexion
                 $connDB = new PDO(DSN,USER,MDP);
-                // //exec requete
+                // //exec requete sous condition du score deja enregistre 
                 $resultat2 = $connDB->query($requete2);
                 // //deco DB
                 $connDB = Null;

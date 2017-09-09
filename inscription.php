@@ -1,14 +1,5 @@
 <?php session_start(); ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8">
-    <title>Projet Alice - Inscription</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <main>
 <?php
  $_SESSION['ident'] = "";
  $_SESSION['mail'] = "";
@@ -47,7 +38,7 @@
               // Connexion via SESSION
               $_SESSION['ident'] = $user_prenom;
               $_SESSION['mail'] = $user_email;
-                header('Location:alice.php');
+                header('Location:alicePOO.php');
 
             } else {
               echo "Une erreur s'est produite, veuillez recommencer";
@@ -61,6 +52,3 @@
       $connDB = Null;
 
 ?>
-    </main>
-  </body>
-</html>

@@ -1,11 +1,8 @@
 <?php
-
   session_start();
+// Initialisation
 $_SESSION['ident'] ="";
-// INIT SESSION(email)
-
-  // Initialisation
-  $erreur = false;
+$erreur = false;
 
   // Récupération des données du formulaire
   // user_prenom
@@ -51,14 +48,19 @@ if ($erreur==false) {
   $donnees = $resultat->fetch(PDO::FETCH_ASSOC);
       if($donnees==false) {
         // Retour à l'accueil
-        header('Location:projet_alice.php');
+
+        // header('Location:projet_alice.php');
       } else {
-        header('Location:alice.php');
+        // header('Location:alice.php');
         //echo "Bienvenue ".$donnees['user_prenom'];
         // Identification OK$_SESSION['ident'] = $user_prenom;
         $_SESSION['ident'] = $donnees['user_prenom'];
         $_SESSION['mail'] = $user_email;
-        header('Location:alice.php');
+
+
+
+
+         header('Location:alicePOO.php');
       }
 
   // Fermeture de la connexion

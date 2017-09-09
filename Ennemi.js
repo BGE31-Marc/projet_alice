@@ -10,7 +10,7 @@ class Ennemi
     this.maxHeight =this.zoneJeu - 2*(this.bordure); // 600px
     this.bordDroitZoneJeu = this.zoneJeu - this.bordure; //700px
 
-    this.vitesse = -(Math.floor(Math.random() * 4) + 4);
+    this.vitesse = -(Math.floor(Math.random() * 4) + 3);
 }
 //create
     create(){
