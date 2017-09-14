@@ -7,7 +7,7 @@
         <title>alice</title>
         <link rel="stylesheet" href="alice.css">
 
-
+<script src="musique/musique.js"></script>
 
 
         <script type="text/javascript">
@@ -25,13 +25,19 @@
 
 
     <body>
+        <audio id="audioSon" src="musique/Do-a-Barrel-Roll.mp3"></audio>
+
         <div class="jeuxALICE">
             <div id="zoneDeJeux"></div>
 
             <div id="bordureG"></div>
-            <div id="bordureD">
-                <div class="debug">
 
+            <div id="bordureD">
+                <audio src="musique/mus.mp3" id="player"></audio>
+                <a href="#" title="Lancer la lecture" class="boutonMusique"><img src="images/play.png" alt="Lecture" id="btnplay"></a>
+                <a href="#" title="Mettre en pause" class="boutonMusique"><img src="images/pause.png" alt="Pause" id="btnpause"></a>
+                <a href="#" class="large" id="fulls">PLEIN ÉCRAN</a>
+                <div class="debug">
 
                     <?php
 
@@ -42,15 +48,18 @@
                      ?>
                 </div>
 
-
-
-
                 <div class="score"></div>
-
                 <input type="button" name="" value="start">
+
+
+
+
+
             </div>
             <div id="alice"></div>
-            <div class="levelUp">LEVEL UP !</div>
+
+
+
         </div>
 
     </body>

@@ -4,16 +4,54 @@
  $_SESSION['ident'] = "";
  $_SESSION['mail'] = "";
   // Récupération des informations du formulaire
-  // (+ VÉRIFICATIONS)
-  $user_prenom = $_POST['user_prenom'];
-  $user_mdp = $_POST['user_mdp'];
-  $user_email = $_POST['user_email'];
-// VERIFICATIONS DES DONNEES ENVOYEES PAR UTILISATEUR
+  //user_prenom
+  if (empty($_POST['user_prenom'])) {
+    // Champ vide ou inexistant
+    $erreur = true;
+  } else {
+    if (strlen($_POST['user_prenom'])>50 || strlen($_POST['user_prenom'])<2) {
+      $erreur = true;
+    } else {
+        //if verif format avec regex
+            $user_prenom = htmlentities($_POST['user_prenom']);
+      //}
+    }
+  }
 
 
 
-  // Formatage
-  $user_mdp = md5($user_mdp);
+  // user_email
+  if (empty($_POST['user_email'])) {
+    // Champ vide ou inexistant
+    $erreur = true;
+  } else {
+    if (strlen($_POST['user_email'])>50 || strlen($_POST['user_email'])<6) {
+      $erreur = true;
+    } else {
+        //if verif format avec regex
+            $user_email = htmlentities($_POST['user_email']);
+      //}
+    }
+  }
+
+
+
+
+  // MOT DE PASSE
+  if (empty($_POST['user_mdp'])) {
+    // Champ vide ou inexistant
+    $erreur = true;
+  } else {
+        if (strlen($_POST['user_mdp'])>20) {
+          $erreur = true;
+        } else {
+          $user_mdp = md5(htmlentities($_POST['user_mdp']));
+        }
+  }
+
+
+
+if($erreur == false){
 
   // Connexion à la DB
   define ('DSN','mysql:host=localhost;dbname=alice_bd');
@@ -30,7 +68,7 @@
 
   if ($donnees===false) {
         // Insertion dans la DB
-        $requete = "INSERT INTO users (user_prenom, user_mdp, user_email) VALUES ('".$user_prenom."','".$user_mdp."','".$user_email."')";
+        $requete = "INSERT INTO users (user_prenom, user_mdp, user_email, user_score) VALUES ('".$user_prenom."','".$user_mdp."','".$user_email."', 0)";
 
         $resultat = $connDB->exec($requete);
             if($resultat==1) {
@@ -50,5 +88,6 @@
 
       // Fermeture de la Connexion
       $connDB = Null;
-
+}
+else{echo "Un des champs est mal rempli...<br>";}
 ?>

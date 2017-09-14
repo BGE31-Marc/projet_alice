@@ -75,6 +75,19 @@ var vitesseEtoile;
 var positionEtoile;
 var cibleEtoile;
 var etoileRecupCSS;
+var  tabEtoile = [];
+// for(i=0; i<15; i++){
+//     tabEtoile[i] = new Etoile(cible, i);
+//     tabEtoile[i].create();
+// }
+
+//le son
+var playerSon;
+var player;
+
+player = document.querySelector('#player');
+player.play();
+
 
 // ## GENERATION DES MONSTRES POO   ######################################
 var tabEnnemi = [];
@@ -94,10 +107,12 @@ level.style.left = 100 + 'px';
 // nbreEnnemiTotal
 gestion_Clavier();
 function loop (){
+//arret de la musique explosion
+
 //etoile bonus
-bonus = Math.floor(Math.random() * 1000);
+bonus = Math.floor(Math.random() * 300);
 if(bonus<2){
-    //appel createEtoile
+
 }
 //deplacementEtoile
 //colisionEtoile -> replacementEtoile
@@ -170,7 +185,7 @@ function gestion_Clavier() {
   // détection de touche non enfoncée
   document.addEventListener('keyup', function(event) {
     touche[event.which] = false;
-    //  ken.style.transform = "scaleX(-1)";
+      //ken.style.transform = "scaleX(-1)";
   });
 }
 function deplacement_Alice(){
@@ -186,19 +201,15 @@ function deplacement_Alice(){
 }
 function missile_F(){
 
-    // if(nbreMissilePresent<4){
-        // nbreMissilePresent++;
-            missilePresent = true;
-            //positionnement du missile aux pieds d'alice
-            positionMissileX = posAlice + demialiceWidth - 10;
-            //création du missile
-            missile = document.createElement('div');
-            missile.setAttribute('class', 'missileTire');
-            missile.style.top = 100 + 'px';
-            missile.style.left = positionMissileX + 'px';
-            cible.appendChild(missile);
-    //}
-
+    missilePresent = true;
+    //positionnement du missile aux pieds d'alice
+    positionMissileX = posAlice + demialiceWidth - 10;
+    //création du missile
+    missile = document.createElement('div');
+    missile.setAttribute('class', 'missileTire');
+    missile.style.top = 50 + 'px';
+    missile.style.left = positionMissileX + 'px';
+    cible.appendChild(missile);
 }
 function collision(k){
     //recup valeur alice
@@ -263,6 +274,14 @@ function collision(k){
     //}fin de collision
 }
 function youLoose(){
+
+    //arret des walkiries
+    player = document.querySelector('#player');
+    player.pause();
+    player.currentTime =0;
+    //declenchement do a barrel roll
+    playerSon = document.querySelector('#audioSon');
+    playerSon.play();
     //gestion du temps
     tempsFinJeux = Date.now();
     partieEnCours = false;
@@ -276,7 +295,11 @@ function youLoose(){
     affiche_temps.style.fontSize = 30 + 'px';
     affiche_temps.style.fontFamiy = 'arial';
     affiche_temps.textContent = "Votre bonus temps " + dureeJeux;
-    bordureD.appendChild(affiche_temps);
+    // bordureD.appendChild(affiche_temps);
+    document.querySelector('#bordureD').insertBefore(affiche_temps, level);
+
+
+
     //calcul du score final
     scoreFinal = (dureeJeux*100) + compteurScore;
     score_total= document.createElement('div');
@@ -285,7 +308,7 @@ function youLoose(){
     score_total.style.fontSize = 35 + 'px';
     score_total.style.fontFamiy = 'arial';
     score_total.textContent = "SCORE FINAL " + scoreFinal;
-    bordureD.appendChild(score_total);
+    zoneDeJeux.appendChild(score_total);
     //enregistrement du score / vers php en ajax
     button_enregistrer = document.createElement('div');
     //bouton enregistrer
@@ -295,7 +318,7 @@ function youLoose(){
     button_enregistrer.style.fontSize = 30 + 'px';
     button_enregistrer.style.fontFamiy = 'arial';
     button_enregistrer.textContent = "enregistrer";
-    bordureD.appendChild(button_enregistrer);
+    zoneDeJeux.appendChild(button_enregistrer);
     button_enregistrer.addEventListener('click', function(){
         var lesValeurs = "action='saveScore'&score="+scoreFinal+"&user_pseudo="+user_pseudo+"&user_email="+user_email+"";
         console.log(lesValeurs);
@@ -320,13 +343,20 @@ function youLoose(){
     button_restart.style.fontSize = 30 + 'px';
     button_restart.style.fontFamiy = 'arial';
     button_restart.textContent = "rejouer";
-    bordureD.appendChild(button_restart);
+    zoneDeJeux.appendChild(button_restart);
     //on relance une nouvelle partie
     button_restart.addEventListener('click', function(){
         bordureD.removeChild(affiche_temps);
-        bordureD.removeChild(score_total);
-        bordureD.removeChild(button_enregistrer);
-        bordureD.removeChild(button_restart);
+        zoneDeJeux.removeChild(score_total);
+        zoneDeJeux.removeChild(button_enregistrer);
+        zoneDeJeux.removeChild(button_restart);
+        //stop du barrel roll
+        playerSon = document.querySelector('#audioSon');
+        playerSon.pause();
+        playerSon.currentTime = 0;
+        //declenche walkiries
+        player = document.querySelector('#player');
+        player.play();
 
         for(i=0; i<20; i++){
             tabEnnemi[i].removeEnnemi();
@@ -346,7 +376,8 @@ function youLoose(){
         partieEnCours = true;
         levelUp = 1;
 
-        // alice.style.left = 475 + 'px';
+
+        //alice.style.left = 475 + 'px';
         //remettre nbre missile a 0
         loop();
     });

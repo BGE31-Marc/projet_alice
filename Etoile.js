@@ -23,6 +23,23 @@ class Etoile
         this.etoileRecupCSS = getComputedStyle(this.cibleEtoile);
     }
 //deplacementEtoile
+    // deplaceEtoile(){
+    //     //recup la position ennemi
+    //     this.topEtoile = parseInt(this.etoileRecupCSS.top.replace("px", ""));
+    //     //deplacement
+    //     this.topEtoile += this.vitesseEtoile;
+    //     this.cibleEtoile.style.top = this.topEtoile + 'px';
+    //     //affichage si sort du haut de la zone de jeu qui est a -150px en hauteur
+    //     if(this.topEtoile < -150){
+    //         this.nouvellePositionEtoile = Math.floor(Math.random()*this.bordDroitZoneJeu)+this.bordure;
+    //         this.cibleEtoile.style.left = this.nouvellePositionEtoile + 'px';
+    //         this.nouvellePositionEtoileTop = Math.floor(Math.random()*this.maxHeight)+this.zoneJeu ;
+    //         this.cibleEtoile.style.top = this.nouvellePositionEtoileTop + 'px';
+    //         this.topEtoile += -(Math.round(Math.random()*this.bordure) + 1 );
+    //     }
+    //
+    //
+    // }
 //replacementEtoile
 
 

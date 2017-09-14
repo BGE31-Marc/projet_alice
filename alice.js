@@ -111,7 +111,7 @@ var affiche_temps;
 var score_total;
 var scoreFinal;
 
-
+var playerSon;
 
 gestion_Clavier();
 // ## FONCTION LOOP ################################################
@@ -195,7 +195,7 @@ function missile_F(){
         //création du missile
         missile = document.createElement('div');
         missile.setAttribute('class', 'missileTire');
-        missile.style.top = 100 + 'px';
+        missile.style.top = 40 + 'px';
         missile.style.left = positionMissileX + 'px';
         cible.appendChild(missile);
 
@@ -281,6 +281,12 @@ function collision(){
                     cibleEnnemi.style.left = nouvellePositionEnnemi + 'px';
                     nouvellePositionEnnemiTop = Math.floor(Math.random()*600)+800;
                     cibleEnnemi.style.top = nouvellePositionEnnemiTop + 'px';
+                    //balise son explosion
+                    playerSon = document.querySelector('#audioSon');
+            		playerSon.play();
+
+
+
                     //effacement missile
                     cible.removeChild(missile);
                     missilePresent = false;
@@ -290,6 +296,9 @@ function collision(){
         //fin test existance missile
         }
     }
+}
+function play(){
+
 }
 function youLoose(){
     //gestion du temps

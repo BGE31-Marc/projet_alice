@@ -30,8 +30,8 @@
           <input type="text" name="user_prenom" value="" placeholder="prénom ou pseudo">
           <input type="email" name="user_email" value="" placeholder="adresse mail">
           <input type="password" name="user_mdp" value="" placeholder="mot de passe">
-          <input type='button' value='valider'>
-          <!-- <input type='submit' value='soumettre'> -->
+          <!-- <input type='button' value='valider'> -->
+          <input type='submit' value='soumettre'>
         </form>
         <h2>AU PAYS DES MERVEILLES</h2>
         <form action="identification.php" method="post" id="connexion">
