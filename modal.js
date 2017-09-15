@@ -16,6 +16,7 @@ $('.modal-close').click(function(){
     return false;
 })
 
+
 $('.modal-click1').click(function(){
 //alert('slt');
     $('.modal-bg').css('display', 'block');

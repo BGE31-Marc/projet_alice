@@ -20,8 +20,9 @@ class Ennemi
         this.ennemi.style.top = -110 + 'px' ;
         var positionEnnemiAleaX = Math.floor(Math.random() * this.maxHeight) + this.bordure;
         this.ennemi.style.left = positionEnnemiAleaX + 'px' ;
-        var numEnnemi = Math.floor(Math.random() * 4) + 1;
-        this.ennemi.style.backgroundImage="url('images/ennemi"+numEnnemi+".png')";
+        var numEnnemi = Math.floor(Math.random() * 3) + 1;
+    // var numEnnemi = 3;
+        this.ennemi.style.backgroundImage="url('img/ennemi"+numEnnemi+".png')";
         //on ajoute l'ennemi dans le DOM
         this.cible.appendChild(this.ennemi);
         //accede proprietes CSS

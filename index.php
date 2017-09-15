@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="accueil.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="modal.js"></script>
-    <script src="traitement.js"></script>
+    <!-- <script src="traitement.js"></script> -->
   </head>
 
 
@@ -21,7 +21,7 @@
         <a href="#" class="modal-click">Les règles</a>
         <a href="#" class="modal-click1">Le top 10</a>
     </nav>
-
+<h1>GALAXY VADERS</h1>
     <div class="formulaires">
         <form action="inscription.php" method="post" id="inscription">
           <fieldset>
@@ -33,7 +33,6 @@
           <!-- <input type='button' value='valider'> -->
           <input type='submit' value='soumettre'>
         </form>
-        <h2>AU PAYS DES MERVEILLES</h2>
         <form action="identification.php" method="post" id="connexion">
             <fieldset>
                 CONNEXION
@@ -51,28 +50,28 @@
         Appuie sur les flêches gauche et droite pour te déplacer et sur la barre d'espace pour tirer.<br>
         Lances des missiles pour détruire les ennemis et gagner plus de points...<br>
         Attention : un seul missile à la fois<br>
-        Attrape l'étoile bonus pour enlever tous les ennemis de l'écran<br>
+        <!-- Attrape l'étoile bonus pour enlever tous les ennemis de l'écran<br> -->
         Penses à enregistrer ton score en fin de partie !<br>
         <span class="modal-close">Fermer</span>
     </div>
 
     <div class="modal-content1">
         <?php
-        define ('DSN','mysql:host=localhost;dbname=alice_bd');
-        define ('USER','root');
-        define ('MDP','');
-        // // Création d'un objet PDO et test de la connexion
-        $connDB = new PDO(DSN,USER,MDP);
-
+        // define ('DSN','mysql:host=localhost;dbname=alice_bd');
+        // define ('USER','root');
+        // define ('MDP','');
+        // // // Création d'un objet PDO et test de la connexion
+        // $connDB = new PDO(DSN,USER,MDP);
+include'connectionDB.php';
             // préparation de la requête
             $requete ="SELECT user_score, user_prenom FROM users ORDER BY user_score DESC LIMIT 10";
             $resultat = $connDB->query($requete);
             $donnees = $resultat->fetchAll();
             //on se deconnecte de la base
-            if($connDB){
-              $connDB = NULL;
-            }
-
+            // if($connDB){
+            //   $connDB = NULL;
+            // }
+include'deconnectionDB.php';
             echo "<table>";
               echo "<tr>";
                 echo '<th>NOM</th>';

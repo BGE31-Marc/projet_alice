@@ -28,6 +28,8 @@
     if (strlen($_POST['user_email'])>50 || strlen($_POST['user_email'])<6) {
       $erreur = true;
     } else {
+        // $regexp = "/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/"
+        // if (preg_match($regexp, $_POST['email']) {
         //if verif format avec regex
             $user_email = htmlentities($_POST['user_email']);
       //}
@@ -54,13 +56,7 @@
 if($erreur == false){
 
   // Connexion à la DB
-  define ('DSN','mysql:host=localhost;dbname=alice_bd');
-  define ('USER','root');
-  define ('MDP','');
-
-  // Création d'un objet PDO et test de la connexion
-  $connDB = new PDO(DSN,USER,MDP);
-
+include'connectionDB.php';
   // Test d'existence du mail
   $requete = "SELECT * FROM users WHERE user_email='".$user_email."' LIMIT 1";
   $resultat = $connDB->query($requete);
@@ -76,18 +72,18 @@ if($erreur == false){
               // Connexion via SESSION
               $_SESSION['ident'] = $user_prenom;
               $_SESSION['mail'] = $user_email;
-                header('Location:alicePOO.php');
+                header('Location:http://sd-67292.dedibox.fr/~celine.m/projet_alice/alicePOO.php');
 
             } else {
               echo "Une erreur s'est produite, veuillez recommencer";
             }
       } else {
         echo "Apparement vous êtes déjà inscrit dans notre DB...<br>";
-        echo "<a href='projet_alice.php'>RETOUR</a>";
+        echo "<a href='http://sd-67292.dedibox.fr/~celine.m/projet_alice/index.php'>RETOUR</a>";
       }
 
       // Fermeture de la Connexion
-      $connDB = Null;
+    include'deconnectionDB.php';
 }
-else{echo "Un des champs est mal rempli...<br>";}
+else{echo "Un des champs est mal rempli...<br>";echo "<a href='http://sd-67292.dedibox.fr/~celine.m/projet_alice/index.php'>RETOUR</a>";}
 ?>

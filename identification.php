@@ -35,20 +35,19 @@ $erreur = false;
 if ($erreur==false) {
   // chek dans la BdD pour Identification
   // Préparation des informations nécessaires
-  define('DSN','mysql:host=127.0.0.1;dbname=alice_bd');
-  define('USER','root');
-  define('MDP','');
-
-  // Création d'un objet PDO et connexion
-  $connDB = new PDO(DSN,USER,MDP);
-
+  // define('DSN','mysql:host=127.0.0.1;dbname=alice_bd');
+  // define('USER','root');
+  // define('MDP','');
+  //
+  // // Création d'un objet PDO et connexion
+  // $connDB = new PDO(DSN,USER,MDP);
+include'connectionDB.php';
   // Extraction des données avec fetch()
   $requete = "SELECT * FROM users WHERE user_email='".$user_email."' AND user_mdp='".$user_mdp."'";
   $resultat = $connDB->query($requete);
   $donnees = $resultat->fetch(PDO::FETCH_ASSOC);
       if($donnees==false) {
         // Retour à l'accueil
-
         // header('Location:projet_alice.php');
       } else {
         // header('Location:alice.php');
@@ -60,16 +59,17 @@ if ($erreur==false) {
 
 
 
-         header('Location:alicePOO.php');
+         header('Location:http://sd-67292.dedibox.fr/~celine.m/projet_alice/alicePOO.php');
       }
 
   // Fermeture de la connexion
-  if ($connDB) {
-      $connDB = NULL;
-  }
+  // if ($connDB) {
+  //     $connDB = NULL;
+  include'deconnectionDB.php';
+  // }
 } else {
   // Retour à l'accueil
-  header('Location:projet_alice.php');
+  header('Location:http://sd-67292.dedibox.fr/~celine.m/projet_alice/index.php');
 }
 
  ?>

@@ -191,10 +191,10 @@ function gestion_Clavier() {
 function deplacement_Alice(){
     // Gestion des touches du clavier -> ondefinie le pas
     if (touche[37]===true && posAlice > positionMini) {
-        posAlice-=8;
+        posAlice-=10;
     }
     if (touche[39]===true && posAlice < positionMaxi) {
-        posAlice+=8;
+        posAlice+=10;
     }
     //on redessine
     alice.style.left = posAlice + 'px';
@@ -207,9 +207,16 @@ function missile_F(){
     //création du missile
     missile = document.createElement('div');
     missile.setAttribute('class', 'missileTire');
-    missile.style.top = 50 + 'px';
+    missile.style.top = 60 + 'px';
     missile.style.left = positionMissileX + 'px';
     cible.appendChild(missile);
+}
+function destructMissile(){
+    //destruct si missile present
+    if(missilePresent){
+            cible.removeChild(missile);
+            missilePresent = false;
+    }
 }
 function collision(k){
     //recup valeur alice
@@ -217,25 +224,30 @@ function collision(k){
     aliceBottom = aliceTop + aliceHeight;
     aliceGauche = parseInt(aliceRecupCSS.left.replace("px", ""));
     aliceDroit = aliceGauche + aliceWidth;
-        if((tabEnnemi[k].topEnnemi < aliceBottom-20) && (tabEnnemi[k].topEnnemi > aliceTop)){
-            var droiteMoins = tabEnnemi[k].droitEnnemi-20;
+        if((tabEnnemi[k].topEnnemi < aliceBottom-5) && (tabEnnemi[k].topEnnemi > aliceTop)){
+            var droiteMoins = tabEnnemi[k].droitEnnemi-5;
             if((droiteMoins>aliceGauche) && (droiteMoins<aliceDroit) ||
-                (tabEnnemi[k].leftEnnemi+20>aliceGauche) && (tabEnnemi[k].leftEnnemi+20<aliceDroit)){
+                (tabEnnemi[k].leftEnnemi+5>aliceGauche) && (tabEnnemi[k].leftEnnemi+5<aliceDroit)){
+                    //destruct si missile present
+                    destructMissile();
                     youLoose();
 
             }
         }
         //collision bas ennemi
-        if((tabEnnemi[k].bottomEnnemi < aliceBottom-20) && (tabEnnemi[k].bottomEnnemi > aliceTop)){
-            if((tabEnnemi[k].droitEnnemi-20>aliceGauche) && (tabEnnemi[k].droitEnnemi-20<aliceDroit) ||
-                (tabEnnemi[k].leftEnnemi+20>aliceGauche) && (tabEnnemi[k].leftEnnemi+20<aliceDroit)){
+        if((tabEnnemi[k].bottomEnnemi < aliceBottom-5) && (tabEnnemi[k].bottomEnnemi > aliceTop)){
+            if((tabEnnemi[k].droitEnnemi-5>aliceGauche) && (tabEnnemi[k].droitEnnemi-5<aliceDroit) ||
+                (tabEnnemi[k].leftEnnemi+5>aliceGauche) && (tabEnnemi[k].leftEnnemi+5<aliceDroit)){
+                    //destruct si missile present
+                    destructMissile();
                     youLoose();
             }
         }
         //collision dim alice a l'interieur de l'ennemi
-        if (tabEnnemi[k].topEnnemi<aliceBottom-20 && tabEnnemi[k].bottomEnnemi>aliceTop) {
-            if(tabEnnemi[k].leftEnnemi+20<aliceGauche && tabEnnemi[k].droitEnnemi-20>aliceDroit){
+        if (tabEnnemi[k].topEnnemi<aliceBottom-5 && tabEnnemi[k].bottomEnnemi>aliceTop) {
+            if(tabEnnemi[k].leftEnnemi+5<aliceGauche && tabEnnemi[k].droitEnnemi-5>aliceDroit){
                 // console.log("collision dessus alice milieu de ennemi");
+                destructMissile();
             youLoose();}
         }
         //test existance missile
@@ -273,8 +285,15 @@ function collision(k){
         }
     //}fin de collision
 }
-function youLoose(){
 
+function youLoose(){
+    //repo alice
+    posAlice = 475;
+    console.log(alice.style.left);
+    //destruct ennemis
+    for(i=0; i<20; i++){
+        tabEnnemi[i].removeEnnemi();
+    }
     //arret des walkiries
     player = document.querySelector('#player');
     player.pause();
@@ -323,7 +342,7 @@ function youLoose(){
         var lesValeurs = "action='saveScore'&score="+scoreFinal+"&user_pseudo="+user_pseudo+"&user_email="+user_email+"";
         console.log(lesValeurs);
         $.ajax({
-           url:'http://localhost/projet_alice/traitementScore.php',
+           url:'http://sd-67292.dedibox.fr/~celine.m/projet_alice/traitementScore.php',
            type:'POST',
            data:lesValeurs,
            dataType:'json',
@@ -358,10 +377,6 @@ function youLoose(){
         player = document.querySelector('#player');
         player.play();
 
-        for(i=0; i<20; i++){
-            tabEnnemi[i].removeEnnemi();
-        }
-
         nbreEnnemiEnPlus = 0;
         for(i=0; i<20; i++){
             tabEnnemi[i] = new Ennemi(cible, i);
@@ -377,7 +392,6 @@ function youLoose(){
         levelUp = 1;
 
 
-        //alice.style.left = 475 + 'px';
         //remettre nbre missile a 0
         loop();
     });
